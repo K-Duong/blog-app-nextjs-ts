@@ -1,8 +1,38 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+--button-default: #FF5DA2;
+--button-hover: #FF3C8B;
+--button-active: #D93670;
+--button-disabled: #F9BBD2;
+
+--button-radius: 12px;
+--button-text-color: #FFFFFF;
+
+ --form-bg: #C9B6E4;
+  --form-border: #d1a5f0;
+  --form-shadow: rgba(0, 0, 0, 0.1);
+  --input-bg: #ffffff;
+  --input-border: #d1a5f0;
+
+}
+html,
+body {
+  /* color: var(--foreground); */
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: auto;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+  max-width: 1024px;
+  width: 100%;
+
 }
 
+/* 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -39,4 +69,4 @@ a {
   html {
     color-scheme: dark;
   }
-}
+} */

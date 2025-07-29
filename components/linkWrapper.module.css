@@ -1,0 +1,17 @@
+.link{
+  padding: 0.5rem;
+  text-decoration: none;
+}
+
+.link:visited{
+  color: black;
+}
+
+.linkActive{
+  border-radius: 5px;
+  background-color: var(--button-active);
+  color: white;
+}
+.linkActive:visited{
+  color: white;
+}
