@@ -1,0 +1,37 @@
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input label {
+  font-weight: 600;
+  color: #2e004f;
+}
+
+/* Inputs & textarea */
+.input input[type="text"],
+.input textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  background-color: var(--input-bg);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input input:focus,
+.input textarea:focus {
+  border-color: var(--button-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 93, 162, 0.2);
+}
+
+.input.error{
+  border-color: red;
+}
+.errorText{
+  color: red;
+  font-size: 0.875rem;
+}

@@ -1,12 +1,29 @@
-import styles from "./form.module.css";
+import PostBlog from "./PostBlog";
 
-const Fields = {
+export interface ValidationRulesType {
+  required?: boolean;
+}
+export interface FieldType {
+  id: string;
+  label: string;
+  type: string;
+  name: string;
+  validationRules: ValidationRulesType;
+}
+export interface FormState {
+  loading: boolean;
+  errors: Record<string, string> | null;
+  success: boolean;
+}
+const fields: Record<string, FieldType> = {
   title: {
     id: "title",
     label: "Title",
     type: "text",
     name: "title",
-    validationRules: {},
+    validationRules: {
+      required: true,
+    },
   },
   image: {
     id: "image",
@@ -20,39 +37,59 @@ const Fields = {
     label: "Content",
     type: "text",
     name: "content",
-    validationRules: {},
+    validationRules: {
+      required: true,
+    },
   },
 };
 
 export default function FormNewBlog() {
-  return (
-    <form className={styles.form}>
-      <div className={styles.input}>
-        <label htmlFor={Fields.title.name}>{Fields.title.label}</label>
-        <input
-          type={Fields.title.type}
-          id={Fields.title.id}
-          name={Fields.title.name}
-        />
-      </div>
-      <div className={styles.input}>
-        <label htmlFor={Fields.image.name}>{Fields.image.label}</label>
-        <input
-          type={Fields.image.type}
-          accept="image/png, image/jpeg"
-          id={Fields.image.id}
-          name={Fields.image.name}
-        />
-      </div>
-      <div className={styles.input}>
-        <label htmlFor={Fields.content.name}>{Fields.content.label}</label>
-        <textarea id={Fields.content.id} name={Fields.content.name} />
-      </div>
+  const handleCreateBlog = async (prevState: FormState, formData: FormData) : Promise<FormState>=> {
+    "use server";
+    const getInputValue = (fieldName: string, formData: FormData) =>
+      formData.get(fields[fieldName].name);
 
-      <div className={styles.cta}>
-        <button type="reset">Reset</button>
-        <button>Create Post</button>
-      </div>
-    </form>
-  );
+    const fieldsList = Object.keys(fields) as Array<keyof typeof fields>;
+    const data = fieldsList.reduce((acc, fieldName) => {
+      acc[fieldName] = getInputValue(fieldName, formData);
+      return acc;
+    }, {} as Record<keyof typeof fields, FormDataEntryValue | null>);
+
+    console.log("form data:", data);
+
+    // validation
+    const errors: Record<string, string> = {};
+
+    fieldsList.forEach((fieldName) => {
+      const rules = fields[fieldName].validationRules;
+      const value = data[fieldName];
+      if (
+        rules.required &&
+        (!value || (typeof value === "string" && value?.trim().length === 0))
+      ) {
+        errors[fieldName] = `${fields[fieldName].label} is required`;
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      console.log("Validation errors:", errors);
+
+      return {
+        loading: false,
+        errors,
+        success: false,
+      };
+    } else {
+      // Simulate a successful form submission
+      console.log("Form submitted successfully with data:", data);
+      return {
+        loading: false,
+        errors: null,
+        success: true,
+      };
+    }
+    // Simulate a loading state
+  };
+
+  return <PostBlog action={handleCreateBlog} fields={fields} />;
 }
