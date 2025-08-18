@@ -1,15 +1,16 @@
 .link{
   padding: 0.5rem;
   text-decoration: none;
+  color: white
 }
 
 .link:visited{
-  color: black;
+  color: white;
 }
 
 .linkActive{
   border-radius: 5px;
-  background-color: var(--button-active);
+  background-color: var(--link-active);
   color: white;
 }
 .linkActive:visited{

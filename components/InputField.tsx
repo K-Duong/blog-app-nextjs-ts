@@ -1,4 +1,4 @@
-import { FieldType } from "./Form";
+import { FieldType } from "@/constants/types";
 import styles from "./inputField.module.css";
 
 export default function InputField({

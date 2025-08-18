@@ -1,95 +1,39 @@
-import PostBlog from "./PostBlog";
+'use client'
 
-export interface ValidationRulesType {
-  required?: boolean;
-}
-export interface FieldType {
-  id: string;
-  label: string;
-  type: string;
-  name: string;
-  validationRules: ValidationRulesType;
-}
-export interface FormState {
-  loading: boolean;
-  errors: Record<string, string> | null;
-  success: boolean;
-}
-const fields: Record<string, FieldType> = {
-  title: {
-    id: "title",
-    label: "Title",
-    type: "text",
-    name: "title",
-    validationRules: {
-      required: true,
-    },
-  },
-  image: {
-    id: "image",
-    label: "Image URL",
-    type: "file",
-    name: "image",
-    validationRules: {},
-  },
-  content: {
-    id: "content",
-    label: "Content",
-    type: "text",
-    name: "content",
-    validationRules: {
-      required: true,
-    },
-  },
-};
+import { useActionState } from "react";
+
+import { FIELDS } from "@/constants";
+import { handleCreateBlog } from "@/actions/blogs";
+
+import InputField from "./InputField";
+import Button from "./Button";
+
+import styles from "./form.module.css";
+
 
 export default function FormNewBlog() {
-  const handleCreateBlog = async (prevState: FormState, formData: FormData) : Promise<FormState>=> {
-    "use server";
-    const getInputValue = (fieldName: string, formData: FormData) =>
-      formData.get(fields[fieldName].name);
-
-    const fieldsList = Object.keys(fields) as Array<keyof typeof fields>;
-    const data = fieldsList.reduce((acc, fieldName) => {
-      acc[fieldName] = getInputValue(fieldName, formData);
-      return acc;
-    }, {} as Record<keyof typeof fields, FormDataEntryValue | null>);
-
-    console.log("form data:", data);
-
-    // validation
-    const errors: Record<string, string> = {};
-
-    fieldsList.forEach((fieldName) => {
-      const rules = fields[fieldName].validationRules;
-      const value = data[fieldName];
-      if (
-        rules.required &&
-        (!value || (typeof value === "string" && value?.trim().length === 0))
-      ) {
-        errors[fieldName] = `${fields[fieldName].label} is required`;
-      }
+    const [state, formAction] = useActionState(handleCreateBlog, {
+      loading: false,
+      errors: null,
+      success: false,
     });
 
-    if (Object.keys(errors).length > 0) {
-      console.log("Validation errors:", errors);
-
-      return {
-        loading: false,
-        errors,
-        success: false,
-      };
-    } else {
-      // Simulate a successful form submission
-      console.log("Form submitted successfully with data:", data);
-      return {
-        loading: false,
-        errors: null,
-        success: true,
-      };
-    }
-    // Simulate a loading state
-  };
-
-  return <PostBlog action={handleCreateBlog} fields={fields} />;
+  return <form action={formAction} className={styles.form}>
+      {Object.keys(FIELDS).map((field) => (
+        <InputField
+          error={
+            state.errors &&
+            Object.keys(state.errors).length > 0 && 
+            state.errors[field]?.length > 0 ?
+            state.errors[field] : ""
+          }
+          key={FIELDS[field].id}
+          field={FIELDS[field]}
+        />
+      ))}
+      <div className={styles.cta}>
+        <Button type='reset'>Reset</Button>
+        <Button type='submit'>Create new post</Button>
+      </div>
+    </form>;
 }
