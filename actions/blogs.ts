@@ -16,6 +16,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
 
   // validation
   const errors: Record<string, string> = {};
+  let imageUrl: string | null = null;
 
   fieldsList.forEach((fieldName) => {
     const rules = FIELDS[fieldName].validationRules;
@@ -26,35 +27,36 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       (value instanceof File && value?.size === 0) || //check for empty file image
       value === null) {
       errors[fieldName] = `${FIELDS[fieldName].label} is required`;
-    } 
+    }
   });
 
-  let imageUrl: string | null = null;
-  
+
   try {
     imageUrl = await uploadImage(data.image as File);
     console.log("Image uploaded successfully:", imageUrl);
   } catch (error: unknown) {
     if (error instanceof Error) {
       return {
-        loading: false,
-        errors: { ...errors, image: error.message || "Failed to upload image" },
-        success: false,
+        ...prevState,
+        errors: { ...prevState.errors, image: error.message || "Failed to upload image" },
       }
     }
   }
-  // console.log("form data:", data);
-
+  
   if (Object.keys(errors).length > 0) {
     console.log("Validation errors:", errors);
     return {
-      loading: false,
-      errors,
-      success: false,
-    };
+      ...prevState,
+      errors: errors
+    }
   } else {
-    
-    return { loading: false, errors: null, success: true }
+    // TODO: send data to the server
+    // console.log("form data:", data);
+    return {
+      ...prevState,
+      errors: null,
+      success: true,
+    }
+    // Simulate a loading state
   }
-  // Simulate a loading state
 };

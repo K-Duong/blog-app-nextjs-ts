@@ -35,3 +35,15 @@
   color: red;
   font-size: 0.875rem;
 }
+
+.previewContainer {
+  width: 100px;
+  height: 100px;
+  border: solid 0.7px, white;
+  border-radius: 0.5rem;
+}
+
+.preview {
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
