@@ -1,9 +1,11 @@
 'use server';
+
 import { FormState } from "@/constants/types";
 import { FIELDS } from "@/constants";
+import { uploadImage } from "@/libs/cloudinary";
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
-  const getInputValue = (fieldName: string, formData: FormData) =>
+  const getInputValue = (fieldName: keyof typeof FIELDS, formData: FormData): FormDataEntryValue | null =>
     formData.get(FIELDS[fieldName].name);
 
   const fieldsList = Object.keys(FIELDS) as Array<keyof typeof FIELDS>;
@@ -11,8 +13,6 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
     acc[fieldName] = getInputValue(fieldName, formData);
     return acc;
   }, {} as Record<keyof typeof FIELDS, FormDataEntryValue | null>);
-
-  console.log("form data:", data);
 
   // validation
   const errors: Record<string, string> = {};
@@ -22,28 +22,39 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
     const value = data[fieldName];
     if (
       rules.required &&
-      (!value || (typeof value === "string" && value?.trim().length === 0))
-    ) {
+      (!value || (typeof value === "string" && value?.trim().length === 0)) || // Check for empty string or null
+      (value instanceof File && value?.size === 0) || //check for empty file image
+      value === null) {
       errors[fieldName] = `${FIELDS[fieldName].label} is required`;
-    }
+    } 
   });
+
+  let imageUrl: string | null = null;
+  
+  try {
+    imageUrl = await uploadImage(data.image as File);
+    console.log("Image uploaded successfully:", imageUrl);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return {
+        loading: false,
+        errors: { ...errors, image: error.message || "Failed to upload image" },
+        success: false,
+      }
+    }
+  }
+  // console.log("form data:", data);
 
   if (Object.keys(errors).length > 0) {
     console.log("Validation errors:", errors);
-
     return {
       loading: false,
       errors,
       success: false,
     };
   } else {
-    // Simulate a successful form submission
-    console.log("Form submitted successfully with data:", data);
-    return {
-      loading: false,
-      errors: null,
-      success: true,
-    };
+    
+    return { loading: false, errors: null, success: true }
   }
   // Simulate a loading state
 };

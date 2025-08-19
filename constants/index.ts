@@ -28,10 +28,13 @@ export const FIELDS: Record<string, FieldType> = {
   },
   image: {
     id: "image",
-    label: "Image URL",
+    label: "Image",
     type: "file",
     name: "image",
-    validationRules: {},
+    validationRules: {
+      required: true,
+      maxSize: 1 * 1024 * 1024, // 1MB
+    },
   },
   content: {
     id: "content",

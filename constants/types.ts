@@ -1,5 +1,7 @@
 export interface ValidationRulesType {
   required?: boolean;
+  maxSize?: number; // in bytes,
+  
 }
 export interface FieldType {
   id: string;

@@ -1,5 +1,10 @@
+"'use client';"
+
+import React from "react";
+
 import { FieldType } from "@/constants/types";
 import styles from "./inputField.module.css";
+import ImageField from "./ImageField";
 
 export default function InputField({
   field,
@@ -8,6 +13,7 @@ export default function InputField({
   field: FieldType;
   error: string;
 }) {
+ 
   let input: React.ReactNode;
   if (field.name === "content") {
     input = (
@@ -20,17 +26,10 @@ export default function InputField({
       />
     );
   } else if (field.name === "image") {
-    input = (
-      <input
-        className={
-          error.length > 0 ? `${styles.input} ${styles.error}` : undefined
-        }
-        type={field.type}
-        accept="image/png, image/jpeg"
-        id={field.id}
-        name={field.name}
-      />
-    );
+    input = (<>
+    <ImageField field={field}/>
+   
+    </>)
   } else {
     input = (
       <input
