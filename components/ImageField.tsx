@@ -7,9 +7,8 @@ import ImagePreview from "./ImagePreview";
 import styles from "./inputField.module.css";
 import { LIMITSIZE } from "@/constants";
 
-export default function ImageField({ field }: { field: FieldType }) {
+export default function ImageField({ field, previewUrl, setPreviewUrl }: { field: FieldType, previewUrl: string, setPreviewUrl: (url: string) => void }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [previewUrl, setPreviewUrl] = useState<string>("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
