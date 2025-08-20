@@ -1,4 +1,8 @@
 import { FieldType } from "./types";
+export const LIMITSIZE = 5; // 5MB
+export const PAGINATION = {
+  LIMIT: 10, // default limit for pagination  
+};
 
 export const PATHS = {
   HOME: {
@@ -33,7 +37,7 @@ export const FIELDS: Record<string, FieldType> = {
     name: "image",
     validationRules: {
       required: true,
-      maxSize: 1 * 1024 * 1024, // 1MB
+      maxSize: LIMITSIZE, // 1MB
     },
   },
   content: {

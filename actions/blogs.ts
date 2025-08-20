@@ -3,6 +3,7 @@
 import { FormState } from "@/constants/types";
 import { FIELDS } from "@/constants";
 import { uploadImage } from "@/libs/cloudinary";
+import { storeBlog } from "@/libs/blogs";
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const getInputValue = (fieldName: keyof typeof FIELDS, formData: FormData): FormDataEntryValue | null =>
@@ -33,7 +34,6 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
 
   try {
     imageUrl = await uploadImage(data.image as File);
-    console.log("Image uploaded successfully:", imageUrl);
   } catch (error: unknown) {
     if (error instanceof Error) {
       return {
@@ -49,14 +49,23 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       ...prevState,
       errors: errors
     }
-  } else {
+  } else if (data && imageUrl && imageUrl.length > 0) {
     // TODO: send data to the server
-    // console.log("form data:", data);
+    const newData = {
+      title: data.title as string,
+      content: data.content as string,
+      imageUrl: imageUrl,
+      userId: 1, // Assuming userId is 1 for now
+    }
+    console.log("form data:", newData);
+    await storeBlog(newData);
     return {
       ...prevState,
       errors: null,
       success: true,
     }
     // Simulate a loading state
+  } else {
+    console.log("No data to submit");
   }
 };

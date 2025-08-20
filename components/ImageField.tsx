@@ -5,6 +5,7 @@ import { FieldType } from "@/constants/types";
 import ImagePreview from "./ImagePreview";
 
 import styles from "./inputField.module.css";
+import { LIMITSIZE } from "@/constants";
 
 export default function ImageField({ field }: { field: FieldType }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -20,9 +21,9 @@ export default function ImageField({ field }: { field: FieldType }) {
       setPreviewUrl("");
       e.target.value = "";
       return;
-    } else if (file && file.size > 1024 * 1024) {
+    } else if (file && file.size > LIMITSIZE * 1024 * 1024) {
       // 1MB limit
-      setErrorMessage("Image is too large. Max size is 1MB");
+      setErrorMessage(`Image is too large. Max size is ${LIMITSIZE}MB`);
       setPreviewUrl("");
       e.target.value = "";
       return;
