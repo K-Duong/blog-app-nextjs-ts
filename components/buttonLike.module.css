@@ -1,0 +1,20 @@
+.buttonLike {
+  background-color: transparent;
+  border: none;
+}
+
+.buttonLike svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: transparent;
+  stroke: #e32195;
+}
+
+.buttonLike:hover svg,
+.liked .buttonLike svg {
+  fill: #e32195;
+}
+
+.liked .buttonLike:hover svg {
+  fill: transparent;
+}

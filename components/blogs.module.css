@@ -1,0 +1,45 @@
+
+.blogs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style-type: none;
+
+}
+
+.blog {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #443f41;
+  background-color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.image {
+  /* width: 8rem;
+  height: 6rem; */
+  object-fit: cover;
+}
+
+.blogContent {
+  flex: 1;
+}
+
+.blog h2,
+.blog p {
+  margin: 0;
+}
+
+.blog header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.blog header p {
+  font-size: 0.9rem;
+  color: #b1a9ac;
+}
