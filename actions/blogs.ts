@@ -50,12 +50,11 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       errors: errors
     }
   } else if (data && imageUrl && imageUrl.length > 0) {
-    // TODO: send data to the server
     const newData = {
       title: data.title as string,
       content: data.content as string,
       imageUrl: imageUrl,
-      userId: 1, // Assuming userId is 1 for now
+      userId: 2, // Assuming userId is 1 for now
     }
     console.log("form data:", newData);
     await storeBlog(newData);
@@ -67,5 +66,11 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
     // Simulate a loading state
   } else {
     console.log("No data to submit");
+    return {
+      // FIXME: handle this error 
+      ...prevState,
+      errors: { ...prevState.errors, general: "No data to submit" },
+      success: false,
+    };
   }
 };

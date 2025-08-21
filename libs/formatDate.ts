@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 
 export const hourFromNow = (date: string): string => {
-  const createdAt = new Date(date);
+  const createdAt = new Date(date + "Z"); // Ensure the date is in UTC
   const result = formatDistanceToNow(createdAt, { addSuffix: true });
   return result
 }
