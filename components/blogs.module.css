@@ -18,8 +18,11 @@
 }
 
 .image {
-  /* width: 8rem;
-  height: 6rem; */
+  width: 100px;
+  height: 100px;
+  
+}
+.image img{
   object-fit: cover;
 }
 
@@ -42,4 +45,11 @@
 .blog header p {
   font-size: 0.9rem;
   color: #b1a9ac;
+}
+
+.likeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
 }

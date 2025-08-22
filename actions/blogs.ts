@@ -54,7 +54,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       title: data.title as string,
       content: data.content as string,
       imageUrl: imageUrl,
-      userId: 2, // Assuming userId is 1 for now
+      userId: 1, // Assuming userId is 1 for now
     }
     console.log("form data:", newData);
     await storeBlog(newData);

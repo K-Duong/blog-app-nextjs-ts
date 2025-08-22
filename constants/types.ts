@@ -24,4 +24,5 @@ export interface BlogType{
   author: string,
   createdAt: string,
   likes: number,
+  isLiked: boolean
 }
