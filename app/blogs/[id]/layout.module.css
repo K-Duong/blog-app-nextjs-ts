@@ -1,0 +1,7 @@
+.blogLayout{
+
+   display: flex;
+  flex-direction: column; /* so children stack */
+  min-height: 100vh;  
+  padding: 0 1rem;
+}

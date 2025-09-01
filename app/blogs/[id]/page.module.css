@@ -1,0 +1,23 @@
+.article {
+  display: flex;
+  flex-direction: column;;
+  padding: 0.5rem 0.5rem;
+  max-width: 1024px;
+  width: 100%;
+}
+
+.imageContainer {
+  width: 60%;
+  max-height: 500px;
+  height: auto;
+  align-self: center;
+  border-radius: 8px;
+}
+
+.imageContainer img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+
+

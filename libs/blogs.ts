@@ -92,7 +92,27 @@ export async function getAllBlogs(maxLimit?: number) {
   );
 
   return maxLimit ? stmt.all(maxLimit) : stmt.all();
-}
+};
+
+export async function getBlogById(blogId: number) {
+  // console.log('blogId:', blogId);
+  const stmt = db.prepare( `SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, EXISTS(SELECT * FROM likes WHERE likes.blog_id = blogs.id AND likes.user_id = 1) as isLiked
+    FROM blogs 
+    INNER JOIN users ON blogs.user_id = users.id
+    LEFT JOIN likes ON likes.blog_id = blogs.id 
+    WHERE blogs.id = ?
+    GROUP BY blogs.id`);
+
+  const result = stmt.get(blogId);
+  // console.log('result: ', result)
+  if (!result){
+    throw new Error('Blog not found');
+  } else {
+    // console.log('Blog found:', result);
+    return result
+  }
+};
+
 //mutations:
 export async function storeBlog(blog: Blog) {
   const user = db.prepare('SELECT * FROM users WHERE id = ?');
@@ -122,13 +142,13 @@ export async function toggleLikeBlog(blogId: number, userId: number) {
       // unlike 
       const deleteStmt = db.prepare('DELETE FROM likes WHERE blog_id = ? AND user_id = ?');
       const result =  deleteStmt.run(blogId, userId);
-      console.log('Unlike result:', result);
+      // console.log('Unlike result:', result);
       return {liked: false}
     } else {
       // like 
       const insertStmt = db.prepare('INSERT INTO likes (blog_id, user_id) VALUES (?, ?)');
       const result = insertStmt.run(blogId, userId);
-      console.log('Like result:', result);
+      // console.log('Like result:', result);
       return {liked: true}
     };
   }

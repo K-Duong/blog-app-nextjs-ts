@@ -3,7 +3,7 @@
 import { FormState } from "@/constants/types";
 import { FIELDS } from "@/constants";
 import { uploadImage } from "@/libs/cloudinary";
-import { storeBlog } from "@/libs/blogs";
+import { getBlogById, storeBlog } from "@/libs/blogs";
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const getInputValue = (fieldName: keyof typeof FIELDS, formData: FormData): FormDataEntryValue | null =>
@@ -56,7 +56,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       imageUrl: imageUrl,
       userId: 1, // Assuming userId is 1 for now
     }
-    console.log("form data:", newData);
+    // console.log("form data:", newData);
     await storeBlog(newData);
     return {
       ...prevState,
@@ -74,3 +74,12 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
     };
   }
 };
+
+export const getBlogByIdAction = async (blogId: number) => {
+  const result = await getBlogById(blogId);
+  if (result) {
+    return result;
+  } else {
+    throw new Error('Blog not found');
+  }
+}

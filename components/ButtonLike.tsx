@@ -10,11 +10,11 @@ export default function ButtonLike({
   blogId: number;
   isLiked: boolean;
 }) {
-//  console.log(isLiked)
   return (
     <form
       className={isLiked ? styles.liked : "undefined"}
       action={() => action(blogId)}
+      onClick= {(e) => e.stopPropagation()}
     >
       <button className={styles.buttonLike} type="submit" aria-label="Like">
         <svg
