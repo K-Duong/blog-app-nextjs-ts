@@ -6,14 +6,9 @@ import { uploadImage } from "@/libs/cloudinary";
 import { getBlogById, storeBlog } from "@/libs/blogs";
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
-  const getInputValue = (fieldName: keyof typeof FIELDS, formData: FormData): FormDataEntryValue | null =>
-    formData.get(FIELDS[fieldName].name);
 
   const fieldsList = Object.keys(FIELDS) as Array<keyof typeof FIELDS>;
-  const data = fieldsList.reduce((acc, fieldName) => {
-    acc[fieldName] = getInputValue(fieldName, formData);
-    return acc;
-  }, {} as Record<keyof typeof FIELDS, FormDataEntryValue | null>);
+  const payload = Object.fromEntries(formData.entries());
 
   // validation
   const errors: Record<string, string> = {};
@@ -21,7 +16,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
 
   fieldsList.forEach((fieldName) => {
     const rules = FIELDS[fieldName].validationRules;
-    const value = data[fieldName];
+    const value = payload[fieldName];
     if (
       rules.required &&
       (!value || (typeof value === "string" && value?.trim().length === 0)) || // Check for empty string or null
@@ -33,7 +28,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
 
 
   try {
-    imageUrl = await uploadImage(data.image as File);
+    imageUrl = await uploadImage(payload.image as File);
   } catch (error: unknown) {
     if (error instanceof Error) {
       return {
@@ -47,12 +42,13 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
     console.log("Validation errors:", errors);
     return {
       ...prevState,
+      payload: formData,
       errors: errors
     }
-  } else if (data && imageUrl && imageUrl.length > 0) {
+  } else if (payload && imageUrl && imageUrl.length > 0) {
     const newData = {
-      title: data.title as string,
-      content: data.content as string,
+      title: payload.title as string,
+      content: payload.content as string,
       imageUrl: imageUrl,
       userId: 1, // Assuming userId is 1 for now
     }
@@ -62,6 +58,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       ...prevState,
       errors: null,
       success: true,
+      payload: formData,
     }
     // Simulate a loading state
   } else {
@@ -71,6 +68,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       ...prevState,
       errors: { ...prevState.errors, general: "No data to submit" },
       success: false,
+      payload: formData,
     };
   }
 };

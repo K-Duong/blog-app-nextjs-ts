@@ -9,9 +9,11 @@ import styles from "./inputField.module.css";
 export default function InputField({
   field,
   error,
+  defaultValue,
 }: {
   field: FieldType;
   error?: string;
+  defaultValue?: string
 }) {
  
  
@@ -25,6 +27,7 @@ export default function InputField({
         type={field.type}
         id={field.id}
         name={field.name}
+        defaultValue={defaultValue}
       />
       {error && <span className={styles.errorText}>{error}</span>}
     </div>

@@ -1,12 +1,14 @@
 import { FieldType } from "@/constants/types";
 import styles from "./inputField.module.css";
 
-export function TextareaField({
+export default function TextareaField({
   field,
   error,
+  defaultValue,
 }: {
   field: FieldType;
   error: string;
+  defaultValue: string,
 }) {
   return (
     <div key={field.id} className={styles.input}>
@@ -17,6 +19,7 @@ export function TextareaField({
         }
         id={field.id}
         name={field.name}
+        defaultValue={defaultValue}
       />
       {error && <span className={styles.errorText}>{error}</span>}
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { FieldType } from "@/constants/types";
 import ImagePreview from "./ImagePreview";
@@ -7,8 +7,25 @@ import ImagePreview from "./ImagePreview";
 import styles from "./inputField.module.css";
 import { LIMITSIZE } from "@/constants";
 
-export default function ImageField({ field, previewUrl, setPreviewUrl }: { field: FieldType, previewUrl: string, setPreviewUrl: (url: string) => void }) {
-  const [errorMessage, setErrorMessage] = useState<string>("");
+export default function ImageField({
+  field,
+  error,
+  previewUrl,
+  setPreviewUrl,
+}: {
+  field: FieldType;
+  error?: string;
+  previewUrl: string;
+  setPreviewUrl: (url: string) => void;
+}) {
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -42,8 +59,8 @@ export default function ImageField({ field, previewUrl, setPreviewUrl }: { field
         onChange={handleImageChange}
       />
       {errorMessage.length > 0 && (
-        <span className={styles.errorText}>{errorMessage}</span>
-      )}
+            <span className={styles.errorText}>{errorMessage}</span>
+          )}
       {previewUrl && <ImagePreview imageUrl={previewUrl} />}
     </>
   );

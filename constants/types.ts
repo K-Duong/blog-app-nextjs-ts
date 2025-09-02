@@ -16,6 +16,7 @@ export interface FormState {
   loading: boolean;
   errors: Record<string, string> | null;
   success: boolean;
+  payload: FormData | null
 }
 
 export interface BlogType{
