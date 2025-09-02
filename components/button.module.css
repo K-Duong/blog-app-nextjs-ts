@@ -1,9 +1,15 @@
 .button{
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   background-color: var(--button-default);
   color: var(--button-text-color);
   border: none;
   border-radius: var(--button-radius);
+  font-size: var(--button-font-size);
+  align-self: center;
+  display: inline;
+
+  
+  /* width: auto; */
 }
 .button:hover{
   background-color: var(--button-hover);

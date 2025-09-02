@@ -11,7 +11,7 @@ export default function InputField({
   error,
 }: {
   field: FieldType;
-  error: string;
+  error?: string;
 }) {
  
  
@@ -19,7 +19,7 @@ export default function InputField({
     <div key={field.id} className={styles.input}>
       <label htmlFor={field.name}>{field.label}</label>
       <input
-        className={
+        className={ error &&
           error.length > 0 ? `${styles.input} ${styles.error}` : undefined
         }
         type={field.type}

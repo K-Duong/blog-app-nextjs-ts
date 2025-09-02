@@ -1,0 +1,8 @@
+
+.linkTo {
+  align-self: center;
+}
+
+.linkTo:visited{
+  color: black;
+}

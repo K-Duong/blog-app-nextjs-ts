@@ -10,7 +10,7 @@
 }
 
 /* Inputs & textarea */
-.input input[type="text"],
+.input input,
 .input textarea {
   padding: 0.75rem 1rem;
   border: 1px solid var(--input-border);

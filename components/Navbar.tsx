@@ -11,12 +11,14 @@ export default function Navbar() {
       <LinkWrapper href={PATHS.HOME.path}>
         <Image priority className={styles.logo} src={logo} alt="logo blog web" />
       </LinkWrapper>
+    {/* TODO: add protected Route */}
 
       <div className={styles.links}>
         <LinkWrapper href={PATHS.BLOGS.path}>{PATHS.BLOGS.name}</LinkWrapper>
         <LinkWrapper href={PATHS.NEWBLOG.path}>
           {PATHS.NEWBLOG.name}
         </LinkWrapper>
+        <LinkWrapper href={PATHS.LOGIN.path}>{PATHS.LOGIN.name}</LinkWrapper>
       </div>
     </nav>
   );

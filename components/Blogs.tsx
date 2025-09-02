@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { BlogType } from "@/constants/types";
-import { MAXLENGTH } from "@/constants";
+import { MAXLENGTHTEXT } from "@/constants";
 import actionToggleLike from "@/actions/like";
 
 import { formatDate, hourFromNow, isDisplayedByHour } from "@/libs/formatDate";
@@ -57,8 +57,8 @@ function Blog({
             </div>
           </header>
           <p>
-            {blog.content.length > MAXLENGTH
-              ? blog.content.slice(0, MAXLENGTH) + "..."
+            {blog.content.length > MAXLENGTHTEXT
+              ? blog.content.slice(0, MAXLENGTHTEXT) + "..."
               : blog.content}
           </p>
         </div>

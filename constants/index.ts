@@ -1,9 +1,13 @@
 import { FieldType } from "./types";
+
 export const LIMITSIZE = 5; // 5MB
-export const MAXLENGTH = 300; // 300 characters for text fields
+export const MAXLENGTHTEXT = 300; // 300 characters for text fields
 export const PAGINATION = {
   LIMIT: 10, // default limit for pagination  
 };
+
+export const MINLENGTHUSERNAME = 3;
+export const MINLENGTHPW = 6;
 
 export const PATHS = {
   HOME: {
@@ -18,6 +22,14 @@ export const PATHS = {
     path: '/new-blog',
     name: 'New blog'
   },
+  LOGIN: {
+    path: '/login',
+    name: 'Login'
+  },
+  SIGNIN: {
+    path: '/sign-in',
+    name: 'Sign In'
+  }
 
 }
 
@@ -51,3 +63,56 @@ export const FIELDS: Record<string, FieldType> = {
     },
   },
 };
+
+export const LOGINFIELDS: Record<string, FieldType> = {
+  email: {
+    id: "email",
+    label: "Email",
+    type: "email",
+    name: "email",
+    validationRules: {
+      required: true,
+    },
+  },
+  password: {
+    id: "password",
+    label: "Password",
+    type: "password",
+    name: "password",
+    validationRules: {
+      required: true,
+    },
+  }
+}
+
+export const SIGNINFIELDS : Record<string, FieldType>= {
+  username: {
+    id: "username",
+    label: "Username",
+    type: "text",
+    name: "username",
+    validationRules: {
+      required: true,
+      minLength: MINLENGTHUSERNAME,
+    },
+  },
+  email: {
+    id: "email",
+    label: "Email",
+    type: "email",
+    name: "email",
+    validationRules: {
+      required: true,
+    },
+  },
+  password: {
+    id: "password",
+    label: "Password",
+    type: "password",
+    name: "password",
+    validationRules: {
+      required: true,
+      minLength: MINLENGTHPW
+    },
+  }
+}

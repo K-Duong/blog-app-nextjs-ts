@@ -7,6 +7,7 @@
   --button-disabled: #f9bbd2;
 
   --button-radius: 8px;
+  --button-font-size: 1rem;
   --button-text-color: #ffffff;
 
   --link-active: #d93670;
@@ -15,6 +16,10 @@
   --form-shadow: rgba(0, 0, 0, 0.1);
   --input-bg: #ffffff;
   --input-border: #d1a5f0;
+
+  --margin-top: 1.5rem;
+
+  --text-md: 1rem;
 }
 html,
 body {
@@ -25,5 +30,9 @@ body {
   margin: auto;
   max-width: 1024px;
   width: 100%;
+}
+
+h1{
+  margin: 0
 }
 
