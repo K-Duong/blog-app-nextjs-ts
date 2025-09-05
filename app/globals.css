@@ -20,6 +20,8 @@
   --margin-top: 1.5rem;
 
   --text-md: 1rem;
+
+  --error: #df1e1d
 }
 html,
 body {

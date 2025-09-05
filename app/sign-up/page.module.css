@@ -1,0 +1,15 @@
+.success {
+  background-color: var(--form-bg);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px var(--form-shadow);
+  max-width: 600px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 40%;
+}
+.success h1 {
+  align-self: center;
+}

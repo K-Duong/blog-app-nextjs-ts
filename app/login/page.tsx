@@ -34,8 +34,10 @@ export default function Login() {
       fields={LOGINFIELDS}
       header={"Login"}
       handleSubmit={handleSubmit}
+      errorMessage=""//FIXME: errorMessage state
+    
     >
-      <LinkWrapper classStyle={styles.linkTo} href={PATHS.SIGNIN.path}>
+      <LinkWrapper classStyle={styles.linkTo} href={PATHS.SIGNUP.path}>
         Create a new account
       </LinkWrapper>
       <Button type="submit" className={styles.cta}>

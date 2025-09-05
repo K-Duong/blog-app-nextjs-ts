@@ -26,9 +26,9 @@ export const PATHS = {
     path: '/login',
     name: 'Login'
   },
-  SIGNIN: {
-    path: '/sign-in',
-    name: 'Sign In'
+  SIGNUP: {
+    path: '/sign-up',
+    name: 'Sign Up'
   }
 
 }

@@ -93,7 +93,7 @@ export default function Blogs({ blogs }: { blogs: BlogType[] }) {
   };
 
   if (!optimisticBlogs || optimisticBlogs.length === 0) {
-    return <p>There are no posts yet. Create a new one!</p>;
+    return <p className={styles.noPost}>There are no posts yet. Create a new one!</p>;
   }
 
   return (

@@ -1,68 +1,4 @@
-import path from 'path';
-import Database from 'better-sqlite3';
-
-const dbPath = path.join(process.cwd(), 'data', 'blogs.db');
-const db = new Database(dbPath);
-
-// create alls tables
-
-function initDb() {
-  db.exec(
-    `CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );`
-  );
-  db.exec(
-    `CREATE TABLE IF NOT EXISTS blogs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      title TEXT NOT NULL,
-      image_url TEXT NOT NULL,
-      content TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    );`
-  );
-
-  db.exec(
-    `CREATE TABLE IF NOT EXISTS likes (
-      user_id INTEGER NOT NULL,
-      blog_id INTEGER NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      PRIMARY KEY(user_id, blog_id),
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-      FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE
-    );`
-  )
-
-};
-
-function createSeedUsers() {
-  const users = [{
-    username: 'admin',
-    password: 'admin123'
-  }, {
-    username: 'duong',
-    password: 'duong123'
-  }];
-  const stmt = db.prepare('SELECT COUNT(*) AS count FROM users');
-  const result = stmt.get() as { count: number };
-  if (result.count === 0) {
-    const insert = db.prepare(`INSERT INTO users (username, password) VALUES (?, ?)`);
-    users.forEach(user => {
-      try {
-        insert.run(user.username, user.password)
-      } catch (error) {
-        console.error(`Error inserting user ${user.username}:`, error);
-      }
-    })
-  }
-};
-initDb();
-createSeedUsers();
+import { db } from "./db";
 
 interface Blog {
   imageUrl: string;
@@ -96,7 +32,8 @@ export async function getAllBlogs(maxLimit?: number) {
 
 export async function getBlogById(blogId: number) {
   // console.log('blogId:', blogId);
-  const stmt = db.prepare( `SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, EXISTS(SELECT * FROM likes WHERE likes.blog_id = blogs.id AND likes.user_id = 1) as isLiked
+  // TODO: assume that user_id = 1 is login
+  const stmt = db.prepare(`SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, EXISTS(SELECT * FROM likes WHERE likes.blog_id = blogs.id AND likes.user_id = 1) as isLiked
     FROM blogs 
     INNER JOIN users ON blogs.user_id = users.id
     LEFT JOIN likes ON likes.blog_id = blogs.id 
@@ -105,7 +42,7 @@ export async function getBlogById(blogId: number) {
 
   const result = stmt.get(blogId);
   // console.log('result: ', result)
-  if (!result){
+  if (!result) {
     throw new Error('Blog not found');
   } else {
     // console.log('Blog found:', result);
@@ -138,18 +75,18 @@ export async function toggleLikeBlog(blogId: number, userId: number) {
   } else {
     const stmt = db.prepare('SELECT * FROM likes WHERE blog_id = ? AND user_id = ?');
     const existingLike = stmt.get(blogId, userId);
-    if(existingLike) {
+    if (existingLike) {
       // unlike 
       const deleteStmt = db.prepare('DELETE FROM likes WHERE blog_id = ? AND user_id = ?');
-      const result =  deleteStmt.run(blogId, userId);
+      const result = deleteStmt.run(blogId, userId);
       // console.log('Unlike result:', result);
-      return {liked: false}
+      return { liked: false }
     } else {
       // like 
       const insertStmt = db.prepare('INSERT INTO likes (blog_id, user_id) VALUES (?, ?)');
       const result = insertStmt.run(blogId, userId);
       // console.log('Like result:', result);
-      return {liked: true}
+      return { liked: true }
     };
   }
 }

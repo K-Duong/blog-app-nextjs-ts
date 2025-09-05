@@ -7,9 +7,7 @@
   font-size: var(--button-font-size);
   align-self: center;
   display: inline;
-
-  
-  /* width: auto; */
+  cursor: pointer;
 }
 .button:hover{
   background-color: var(--button-hover);
