@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials"
 import NextAuth, { type User, AuthOptions } from "next-auth"
 
-import { errorMessages } from "@/constants"
+import { ERRORMESSAGES} from "@/constants"
 import { getUserByEmail, verifyPw } from "@/libs/users"
 import { isValidEmail, isValidPw } from "@/libs/utils"
 
@@ -28,11 +28,11 @@ const authOptions: AuthOptions = {
 
         // 2- getUserByEmail
         const user = await getUserByEmail(email);
-        if (!user) throw new Error(errorMessages.notValidCredentials)
+        if (!user) throw new Error(ERRORMESSAGES.notValidCredentials)
 
         // 3. check password
         const isCorrectPw = await verifyPw(password, user.password);
-        if (!isCorrectPw) throw new Error(errorMessages.notValidCredentials)
+        if (!isCorrectPw) throw new Error(ERRORMESSAGES.notValidCredentials)
         const userData = { ...user, id: user.id.toString() };
         console.log("userData:", userData);
         

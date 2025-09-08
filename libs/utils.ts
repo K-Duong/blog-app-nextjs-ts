@@ -1,4 +1,4 @@
-import { MINLENGTHPW} from "@/constants";
+import { MINLENGTHPW, MINLENGTHUSERNAME} from "@/constants";
 
 // const errorMessages = {
 //   userName: {
@@ -19,6 +19,9 @@ export const isValidEmail = (email: string) => {
   return regexEmail.test(email) 
 
 };
+export const isValidUsername = (username: string) => {
+  return username.trim().length >= MINLENGTHUSERNAME; 
+}
 
 export const isValidPw = (password: string) => {
   return password.trim().length >= MINLENGTHPW 

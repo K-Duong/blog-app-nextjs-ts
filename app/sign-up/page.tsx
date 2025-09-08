@@ -1,28 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 
+import { useState } from "react";
+import { redirect } from "next/navigation";
 
 import FormContainer from "@/components/FormContainer";
 import Button from "@/components/Button";
-import { MINLENGTHPW, MINLENGTHUSERNAME, SIGNINFIELDS } from "@/constants";
+
+import { isValidEmail, isValidPw, isValidUsername } from "@/libs/utils";
+import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";
 
 import styles from "./page.module.css";
 
-const errorMessages = {
-  userName: {
-    minLength: `Your username should contains at least ${MINLENGTHUSERNAME} characters`,
-    unique: "This username exists already.",
-  },
-  password: {
-    minLength: `Your password should contain at least ${MINLENGTHPW} characters`,
-  },
-  email: {
-    format: "Enter a valid email",
-    unique: "This email exists already",
-  },
-  generalError: "Something went wrong, please try again!",
-};
+
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -37,24 +26,20 @@ export default function SignIn() {
       string
     >;
     console.log("payload", payload);
-    const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const username = payload.username.trim();
     const email = payload.email.trim();
     const password = payload.password;
 
-    // add validation
-    //1-username.minLength
+    // add validation: min length username, password, email format
     try {
-      if (username.length < MINLENGTHUSERNAME) {
-        throw new Error(errorMessages.userName.minLength);
+      if (isValidUsername(username) === false) {
+        throw new Error(ERRORMESSAGES.userName.minLength);
       }
-      //2-min length pw
-      if (password.length < MINLENGTHPW) {
-        throw new Error(errorMessages.password.minLength);
+      if (isValidPw(password) === false) {
+        throw new Error(ERRORMESSAGES.password.minLength);
       }
-      //3- invalid email
-      if (!regexEmail.test(email)) {
-        throw new Error(errorMessages.email.format);
+      if (isValidEmail(email) === false) {
+        throw new Error(ERRORMESSAGES.email.format);
       }
       // send payload to db function signIn()
       const res = await fetch("/api/auth/signUp", {
@@ -65,7 +50,7 @@ export default function SignIn() {
         body: JSON.stringify({ username, email, password }),
       });
       const data = await res.json();
-      console.log("data new user", data, 'res', res);
+      console.log("data new user", data, "res", res);
 
       // validation from db
       if (res.ok && res.status === 201) {
@@ -73,11 +58,12 @@ export default function SignIn() {
         setErrorMessage("");
         form.reset();
       } else {
-        throw new Error(data.error)
+        throw new Error(data.error);
       }
     } catch (e: unknown) {
       setIsSubmitted(false);
-      const message = e instanceof Error ? e.message : errorMessages.generalError
+      const message =
+        e instanceof Error ? e.message : ERRORMESSAGES.generalError;
       setErrorMessage(message);
     }
   };

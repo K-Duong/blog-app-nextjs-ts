@@ -117,7 +117,7 @@ export const SIGNINFIELDS : Record<string, FieldType>= {
   }
 }
 
-export const errorMessages = {
+export const ERRORMESSAGES = {
   userName: {
     minLength: `Your username should contains at least ${MINLENGTHUSERNAME} characters`,
     unique: "This username exists already.",
