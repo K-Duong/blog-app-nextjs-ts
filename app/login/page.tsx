@@ -1,41 +1,53 @@
 "use client";
 
-import { LOGINFIELDS, PATHS } from "@/constants";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 import LinkWrapper from "@/components/LinkWrapper";
 import Button from "@/components/Button";
 import FormContainer from "@/components/FormContainer";
+import { LOGINFIELDS, PATHS } from "@/constants";
 
 import styles from "./page.module.css";
-
-const errorMessages = {
-  invalidEmail : 'Enter a valid email',
-  invalidPw: 'Email or password is wrong. Please try again!',
-  generalError: 'Something went wrong, please try again!'
-}
+import { isValidEmail, isValidPw } from "@/libs/utils";
+import { redirect } from "next/navigation";
 
 export default function Login() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
-    console.log("payload", payload);
-    // validation front:
-      // 1- invalid email "Enter a valid email"
+    const payload = Object.fromEntries(formData.entries()) as Record<
+      string,
+      string
+    >;
+    // validation:
+    if (!isValidEmail(payload.email) || !isValidPw(payload.password)) {
+      setErrorMessage("Invalid credentials.");
+      return;
+    }
 
     // send payload to db ()
-    // add validation message
-      // 2- invalid password "Email or password is wrong. Please try again"
-      // 3- disconnect or error from db: "Something went wront, please try again"
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: payload.email,
+      password: payload.password,
+    });
+    if (result?.error) {
+      setErrorMessage(result.error);
+      return;
+    }
+
     // redirect to blogs
-    };
+    redirect("/blogs");
+  };
   return (
     <FormContainer
       fields={LOGINFIELDS}
       header={"Login"}
       handleSubmit={handleSubmit}
-      errorMessage=""//FIXME: errorMessage state
-    
+      errorMessage={errorMessage}
     >
       <LinkWrapper classStyle={styles.linkTo} href={PATHS.SIGNUP.path}>
         Create a new account
