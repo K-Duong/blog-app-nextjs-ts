@@ -4,17 +4,21 @@ import { db } from "./db";
 
 import { MINLENGTHPW } from '@/constants';
 
+const hashPw = async (password: string) : Promise<string> => await bcrypt.hash(password, 10)
+export const verifyPw = async (password: string, hashedPw: string)=> await bcrypt.compare(password, hashedPw) 
+
 //create user
 type UserCheck = { username: string, email: string };
-interface UserData {
+interface UserPayload {
+  id: number,
   email: string,
   username: string,
   password: string
 };
 
-export const createUser = async (userData: UserData) => {
+export const createUser = async (userPayload: UserPayload) => {
   try {
-    const { email, username, password } = userData;
+    const { email, username, password } = userPayload;
     // check pw min length
     if (password.length < MINLENGTHPW) {
       throw new Error('Min length pw is 6 characters')
@@ -31,7 +35,7 @@ export const createUser = async (userData: UserData) => {
       throw new Error("This email already exists");
     }
     // hash
-    const hashedPw = await bcrypt.hash(password, 10);
+    const hashedPw = await hashPw(password);
 
     // insert new user to db
     const insert = db.prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
@@ -61,7 +65,15 @@ export const createUser = async (userData: UserData) => {
   }
 }
 
-//login
+//getUserByEmail for login
+export const getUserByEmail = async (email: string) : Promise<UserPayload | null>=> {
+  const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+  const user = stmt.get(email) as UserPayload 
+  if(!user) return null
+  return user 
+}
+
+
 
 //update user (pw, username)
 

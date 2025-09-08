@@ -116,3 +116,19 @@ export const SIGNINFIELDS : Record<string, FieldType>= {
     },
   }
 }
+
+export const errorMessages = {
+  userName: {
+    minLength: `Your username should contains at least ${MINLENGTHUSERNAME} characters`,
+    unique: "This username exists already.",
+  },
+  password: {
+    minLength: `Your password should contain at least ${MINLENGTHPW} characters`,
+  },
+  email: {
+    format: "Enter a valid email",
+    unique: "This email exists already",
+  },
+  generalError: "Something went wrong, please try again!",
+  notValidCredentials: "Your email or your password is incorrect"
+};
