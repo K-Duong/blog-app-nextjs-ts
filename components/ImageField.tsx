@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { FieldType } from "@/constants/types";
+import { FieldType } from "@/types";
 import ImagePreview from "./ImagePreview";
 
 import styles from "./inputField.module.css";

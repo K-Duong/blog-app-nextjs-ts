@@ -1,4 +1,4 @@
-import { FieldType } from "./types";
+import { FieldType } from "@/types";
 
 export const LIMITSIZE = 5; // 5MB
 export const MAXLENGTHTEXT = 300; // 300 characters for text fields

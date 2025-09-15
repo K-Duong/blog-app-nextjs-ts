@@ -1,4 +1,4 @@
-import { FieldType } from "@/constants/types";
+import { FieldType } from "@/types";
 import styles from "./inputField.module.css";
 
 export default function TextareaField({

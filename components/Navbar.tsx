@@ -39,7 +39,7 @@ export default function Navbar() {
               {PATHS.NEWBLOG.name}
             </LinkWrapper>
             <Button type="button" onClick={() => signOut()}>
-              Logout
+              Log Out
             </Button>
           </>
         )}

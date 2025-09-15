@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { FieldType } from "@/constants/types";
+import { FieldType } from "@/types";
 import styles from "./inputField.module.css";
 // import ImageField from "./ImageField";
 

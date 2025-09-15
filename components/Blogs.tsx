@@ -82,6 +82,7 @@ export default function Blogs({ blogs }: { blogs: BlogType[] }) {
       };
       const newBlogs = [...prevBlogs];
       newBlogs[index] = updatedBlog;
+      // console.log('updated blog:', updatedBlog)
       return newBlogs;
     }
   );

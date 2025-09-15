@@ -1,6 +1,6 @@
 // 'use client'
 
-import { FieldType } from "@/constants/types";
+import { FieldType } from "@/types";
 // import Button from "./Button";
 import InputField from "./InputField";
 

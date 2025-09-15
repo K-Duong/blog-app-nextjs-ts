@@ -1,15 +1,13 @@
 'use server';
 
-import { getServerSession } from "next-auth";
-
 import { FormState } from "@/types";
 import { FIELDS } from "@/constants";
 import { uploadImage } from "@/libs/cloudinary";
-import { getBlogById, storeBlog } from "@/libs/blogs";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { storeBlog } from "@/libs/blogs";
+import { getCurrentUserId } from "@/libs/auth";
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
-  const session = await getServerSession(authOptions);
+  const userId = await getCurrentUserId(); 
 
   const fieldsList = Object.keys(FIELDS) as Array<keyof typeof FIELDS>;
   const payload = Object.fromEntries(formData.entries());
@@ -29,7 +27,6 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       errors[fieldName] = `${FIELDS[fieldName].label} is required`;
     }
   });
-
 
   try {
     imageUrl = await uploadImage(payload.image as File);
@@ -54,7 +51,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       title: payload.title as string,
       content: payload.content as string,
       imageUrl: imageUrl,
-      userId: 1, //TODO: Assuming userId is 1 for now
+      userId: userId
     }
     // console.log("form data:", newData);
     await storeBlog(newData);
@@ -77,11 +74,13 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
   }
 };
 
-export const getBlogByIdAction = async (blogId: number) => {
-  const result = await getBlogById(blogId);
-  if (result) {
-    return result;
-  } else {
-    throw new Error('Blog not found');
-  }
-}
+// export const getBlogByIdAction = async (blogId: number) => {
+//   const session = await getServerSession(authOptions);
+//   const result = await getBlogById(blogId, Number(session?.user.id));
+//   console.log('result get blog by id action: ', result)
+//   if (result) {
+//     return result;
+//   } else {
+//     throw new Error('Blog not found');
+//   }
+// }

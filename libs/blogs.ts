@@ -10,7 +10,7 @@ interface Blog {
 
 // queries
 
-export async function getAllBlogs(maxLimit?: number) {
+export async function getAllBlogs(userId: number, maxLimit?: number, ) {
   // we suppose that the current user can see all blogs of all users and he can like any blog. There are also counter for likes and the button is liked or not.
   let limitClause = '';
   if (maxLimit && maxLimit > 0) {
@@ -19,7 +19,10 @@ export async function getAllBlogs(maxLimit?: number) {
 
   const stmt = db.prepare(
     // suppose that the current user is user with id = 1
-    `SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, EXISTS (SELECT * FROM likes WHERE likes.blog_id = blogs.id AND likes.user_id = 1) as isLiked
+    `SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
+    EXISTS (SELECT * FROM likes  
+      INNER JOIN users ON likes.user_id = users.id
+      WHERE likes.blog_id = blogs.id AND likes.user_id = ?) as isLiked
     FROM blogs
     INNER JOIN users ON blogs.user_id = users.id
     LEFT JOIN likes ON likes.blog_id = blogs.id
@@ -28,25 +31,26 @@ export async function getAllBlogs(maxLimit?: number) {
     ${limitClause}`
   );
   // await waitForDebug(3000) // simulate delay
-  return maxLimit ? stmt.all(maxLimit) : stmt.all();
+  return maxLimit ? stmt.all(maxLimit, userId) : stmt.all(userId);
 };
 
-export async function getBlogById(blogId: number) {
-  // console.log('blogId:', blogId);
-  // TODO: assume that user_id = 1 is login
-  const stmt = db.prepare(`SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, EXISTS(SELECT * FROM likes WHERE likes.blog_id = blogs.id AND likes.user_id = 1) as isLiked
+export async function getBlogById(blogId: number, userId: number) {
+  const stmt = db.prepare(`SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
+    EXISTS(SELECT * FROM likes  
+      INNER JOIN users ON likes.user_id = users.id
+      WHERE likes.blog_id = blogs.id AND likes.user_id = ?
+      ) as isLiked
     FROM blogs 
     INNER JOIN users ON blogs.user_id = users.id
     LEFT JOIN likes ON likes.blog_id = blogs.id 
     WHERE blogs.id = ?
     GROUP BY blogs.id`);
 
-  const result = stmt.get(blogId);
-  // console.log('result: ', result)
+  const result = stmt.get(userId, blogId);
+  console.log('result get blog by id: ', result)
   if (!result) {
     throw new Error('Blog not found');
   } else {
-    // console.log('Blog found:', result);
     return result
   }
 };

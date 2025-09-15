@@ -8,9 +8,8 @@ import Blogs from "@/components/Blogs";
 import styles from "./page.module.css"
 
 export default async function BlogsPage(){
-  const blogs = await getAllBlogs() as BlogType[];
   const session = await getServerSession(authOptions); 
-  
+  const blogs = await getAllBlogs(Number(session?.user.id)) as BlogType[];
   
   return (
     <div className={styles.contain}>
