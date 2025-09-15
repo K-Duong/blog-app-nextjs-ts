@@ -1,13 +1,19 @@
 import CredentialsProvider from "next-auth/providers/credentials"
-import NextAuth, { type User, AuthOptions } from "next-auth"
+import NextAuth, { type User, AuthOptions, Session } from "next-auth"
 
-import { ERRORMESSAGES} from "@/constants"
+import { ERRORMESSAGES } from "@/constants"
 import { getUserByEmail, verifyPw } from "@/libs/users"
 import { isValidEmail, isValidPw } from "@/libs/utils"
+import { JWT } from "next-auth/jwt"
 
 
-
-const authOptions: AuthOptions = {
+// TODO: move to options.ts
+export const authOptions: AuthOptions = {
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 1 day
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -33,9 +39,9 @@ const authOptions: AuthOptions = {
         // 3. check password
         const isCorrectPw = await verifyPw(password, user.password);
         if (!isCorrectPw) throw new Error(ERRORMESSAGES.notValidCredentials)
-        const userData = { ...user, id: user.id.toString() };
-        console.log("userData:", userData);
-        
+        const userData = { id: user.id.toString(), email: user.email, username: user.username };
+        console.log("-------userData:", userData);
+
         return userData
       },
     }),
@@ -43,8 +49,25 @@ const authOptions: AuthOptions = {
   pages: {
     signIn: "/login",
   },
-  session: { strategy: "jwt" },
+  callbacks: {
+    async jwt({token, user}: {token: JWT, user?: User}) {
+      if (user) {
+        token.id = user.id;
+        token.username = user.username;
+      };
+      return token;
+    },
 
+    async session ({session, token} : {session: Session, token: JWT}) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+        session.user.username= token.username as string;
+      };
+      console.log("session callback session:", session);
+      return session;
+    }
+  
+  }
 };
 
 const handler = NextAuth(authOptions)

@@ -3,12 +3,11 @@ import { useOptimistic } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { BlogType } from "@/constants/types";
+import { BlogType } from "@/types";
 import { MAXLENGTHTEXT } from "@/constants";
 import actionToggleLike from "@/actions/like";
-
 import { formatDate, hourFromNow, isDisplayedByHour } from "@/libs/formatDate";
-import ButtonLike from "./ButtonLike";
+import ButtonLike from "./ButtonLike"
 
 import styles from "./blogs.module.css";
 

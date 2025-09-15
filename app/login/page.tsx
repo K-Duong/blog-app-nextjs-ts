@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 import LinkWrapper from "@/components/LinkWrapper";
 import Button from "@/components/Button";
 import FormContainer from "@/components/FormContainer";
-import { LOGINFIELDS, PATHS } from "@/constants";
+import { ERRORMESSAGES, LOGINFIELDS, PATHS } from "@/constants";
+import { isValidEmail, isValidPw } from "@/libs/utils";
 
 import styles from "./page.module.css";
-import { isValidEmail, isValidPw } from "@/libs/utils";
-import { redirect } from "next/navigation";
 
 export default function Login() {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -24,7 +24,7 @@ export default function Login() {
     >;
     // validation:
     if (!isValidEmail(payload.email) || !isValidPw(payload.password)) {
-      setErrorMessage("Invalid credentials.");
+      setErrorMessage(ERRORMESSAGES.notValidCredentials);
       return;
     }
 

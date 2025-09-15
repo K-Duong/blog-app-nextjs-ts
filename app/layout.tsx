@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { getServerSession } from "next-auth";
 
+import { authOptions } from "./api/auth/[...nextauth]/route";
 import Navbar from "@/components/Navbar";
-import Providers from "@/app/Providers";
+import Providers from "./Providers";
+
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,15 +23,16 @@ export const metadata: Metadata = {
   description: "Welcome to my blogs",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Providers>
+        <Providers session={session}>
           <Navbar />
           {children}
         </Providers>

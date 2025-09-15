@@ -1,11 +1,15 @@
 'use server';
 
-import { FormState } from "@/constants/types";
+import { getServerSession } from "next-auth";
+
+import { FormState } from "@/types";
 import { FIELDS } from "@/constants";
 import { uploadImage } from "@/libs/cloudinary";
 import { getBlogById, storeBlog } from "@/libs/blogs";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
+  const session = await getServerSession(authOptions);
 
   const fieldsList = Object.keys(FIELDS) as Array<keyof typeof FIELDS>;
   const payload = Object.fromEntries(formData.entries());
@@ -50,7 +54,7 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       title: payload.title as string,
       content: payload.content as string,
       imageUrl: imageUrl,
-      userId: 1, // Assuming userId is 1 for now
+      userId: 1, //TODO: Assuming userId is 1 for now
     }
     // console.log("form data:", newData);
     await storeBlog(newData);

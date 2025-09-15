@@ -1,4 +1,5 @@
 import { db } from "./db";
+// import { waitForDebug } from "./utils";
 
 interface Blog {
   imageUrl: string;
@@ -26,7 +27,7 @@ export async function getAllBlogs(maxLimit?: number) {
     ORDER BY blogs.created_at DESC
     ${limitClause}`
   );
-
+  // await waitForDebug(3000) // simulate delay
   return maxLimit ? stmt.all(maxLimit) : stmt.all();
 };
 

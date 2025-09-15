@@ -18,14 +18,3 @@ export interface FormState {
   success: boolean;
   payload: FormData | null
 }
-
-export interface BlogType{
-  id: number,
-  imageUrl: string,
-  title: string,
-  content: string,
-  author: string,
-  createdAt: string,
-  likes: number,
-  isLiked: boolean
-}
