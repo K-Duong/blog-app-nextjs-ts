@@ -21,6 +21,7 @@ export const authOptions: AuthOptions = {
       async authorize(
         credentials: Record<string, string> | undefined
       ): Promise<User | null> {
+        // console.log("credentials for authorize:", credentials)
         if (!credentials) return null;
 
         const email = credentials.email;
@@ -62,7 +63,7 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id as string;
         session.user.username= token.username as string;
       };
-      // console.log("session callback session:", session);
+      console.log("session callback session:", session);
       return session;
     }
   

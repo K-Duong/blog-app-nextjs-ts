@@ -1,27 +1,52 @@
 "use client";
 
+import { useActionState, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { useActionState, useState } from "react";
 
 import { FIELDS } from "@/constants";
-import { handleCreateBlog } from "@/actions/blogs";
+import { BlogType } from "@/types";
+
+import { handleCreateBlog, handleUpdateBlog } from "@/actions/blogs";
 
 import InputField from "./InputField";
 import Button from "./Button";
 import ImageField from "./ImageField";
-import TextareaField  from "./TextareaField";
+import TextareaField from "./TextareaField";
 
 import styles from "./form.module.css";
 
-export default function FormNewBlog() {
+export default function FormNewBlog({ blog }: { blog?: BlogType }) {
   const [previewUrl, setPreviewUrl] = useState<string>("");
-
-  const [state, formAction] = useActionState(handleCreateBlog, {
-    loading: false,
-    errors: null,
-    success: false,
-    payload: null,
+  const [defaultValues, setDefaultValues] = useState<FormData>(() => {
+    const formData = new FormData();
+    formData.set("title", blog?.title || "");
+    formData.set("content", blog?.content || "");
+    formData.set("image", blog?.imageUrl || "");
+    return formData;
   });
+  useEffect(() => {
+    if (blog && Object.keys(blog).length > 0) {
+      console.log("set default values for update blog form");
+      const formData = new FormData();
+      formData.set("title", blog.title);
+      formData.set("content", blog.content);
+      formData.set("image", blog.imageUrl);
+      setDefaultValues(formData);
+      setPreviewUrl(blog.imageUrl);
+    }
+  }, [blog]);
+
+  const [state, formAction] = useActionState(
+    blog && blog.id > 0
+      ? handleUpdateBlog.bind(null, blog?.id)
+      : handleCreateBlog,
+    {
+      loading: false,
+      errors: null,
+      success: false,
+      payload: defaultValues,
+    }
+  );
 
   if (state.loading) {
     return <h1> Submitting...</h1>;
@@ -37,9 +62,12 @@ export default function FormNewBlog() {
     >
       {Object.keys(FIELDS).map((field) => {
         const fieldValue = FIELDS[field];
+        
         if (field === "image") {
+          console.log(state);
           return (
             <ImageField
+              defaultValue = {(state.payload?.get(`image`) as string) || ""}
               key={field}
               field={fieldValue}
               error={
@@ -86,8 +114,8 @@ export default function FormNewBlog() {
         }
       })}
       <div className={styles.cta}>
-        <Button type="reset">Reset</Button>
-        <Button type="submit">Create new post</Button>
+        <Button type="submit">{blog && blog.id > 0  ? 'Update blog' : 'Create new post'}</Button>
+        {blog && blog.id > 0 ? <Button type="button" onClick={() => redirect(`/blogs`)}> Cancel </Button> : <Button type="reset">Reset</Button>}
       </div>
     </form>
   );

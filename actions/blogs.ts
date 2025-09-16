@@ -1,86 +1,123 @@
 'use server';
 
-import { FormState } from "@/types";
+import { BlogPayload, FormState } from "@/types";
 import { FIELDS } from "@/constants";
 import { uploadImage } from "@/libs/cloudinary";
-import { storeBlog } from "@/libs/blogs";
-import { getCurrentUserId } from "@/libs/auth";
+import { storeBlog, updateBlog } from "@/libs/blogs";
+import { getCurrentUser } from "@/libs/auth";
 
-export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
-  const userId = await getCurrentUserId(); 
+// helper function to handle the process of blog'validation and upload image to cloudinary
+const processCheckingInput = async (formData: FormData) => {
+  //get current user id
+  const user = await getCurrentUser();
+  const errors: Record<string, string> = {};
+  let imageUrl: string | null = '';
 
+  // check validation rules
   const fieldsList = Object.keys(FIELDS) as Array<keyof typeof FIELDS>;
   const payload = Object.fromEntries(formData.entries());
 
   // validation
-  const errors: Record<string, string> = {};
-  let imageUrl: string | null = null;
-
   fieldsList.forEach((fieldName) => {
     const rules = FIELDS[fieldName].validationRules;
     const value = payload[fieldName];
     if (
       rules.required &&
       (!value || (typeof value === "string" && value?.trim().length === 0)) || // Check for empty string or null
-      (value instanceof File && value?.size === 0) || //check for empty file image
+      // (value instanceof File && value?.size === 0) || //check for empty file image
       value === null) {
       errors[fieldName] = `${FIELDS[fieldName].label} is required`;
     }
   });
 
   try {
-    imageUrl = await uploadImage(payload.image as File);
+    if (!payload.existingImageUrl && payload.image && payload.image instanceof File && payload.image.size === 0) {
+      errors['image'] = `Image is required`
+    } else if (payload.existingImageUrl && typeof payload.existingImageUrl === 'string' && payload.existingImageUrl.length > 0) {
+      if (!payload.image || (payload.image instanceof File && payload.image.size === 0)) {
+        // use existing image url
+        imageUrl = payload.existingImageUrl;
+      } else {
+        // upload new image to cloudinary
+        imageUrl = await uploadImage(payload.image as File);
+      };
+    } else {
+      // upload image to cloudinary
+      imageUrl = await uploadImage(payload.image as File);
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       return {
-        ...prevState,
-        errors: { ...prevState.errors, image: error.message || "Failed to upload image" },
+        errors: { image: error.message || "Failed to upload image" },
       }
     }
   }
-  
-  if (Object.keys(errors).length > 0) {
-    console.log("Validation errors:", errors);
+
+  const newBlogData: BlogPayload = {
+    title: payload.title as string,
+    content: payload.content as string,
+    imageUrl: imageUrl,
+    userId: Number(user.id)
+  }
+  // return values ({errors, payload})
+  return {
+    errors,
+    newBlogData
+  }
+}
+
+export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
+  console.log("create new blog")
+  const { errors, newBlogData } = await processCheckingInput(formData);
+
+  if (errors && Object.keys(errors).length > 0) {
     return {
       ...prevState,
+      success: false,
       payload: formData,
-      errors: errors
+      errors: { ...prevState.errors, ...errors }
     }
-  } else if (payload && imageUrl && imageUrl.length > 0) {
-    const newData = {
-      title: payload.title as string,
-      content: payload.content as string,
-      imageUrl: imageUrl,
-      userId: userId
-    }
-    // console.log("form data:", newData);
-    await storeBlog(newData);
+  } else {
+    if (!newBlogData) return {
+      ...prevState,
+      errors: { ...prevState.errors, general: "No data to submit" }
+    };
+
+    await storeBlog(newBlogData);
     return {
       ...prevState,
       errors: null,
       success: true,
       payload: formData,
     }
-    // Simulate a loading state
-  } else {
-    console.log("No data to submit");
-    return {
-      // FIXME: handle this error 
-      ...prevState,
-      errors: { ...prevState.errors, general: "No data to submit" },
-      success: false,
-      payload: formData,
-    };
   }
 };
 
-// export const getBlogByIdAction = async (blogId: number) => {
-//   const session = await getServerSession(authOptions);
-//   const result = await getBlogById(blogId, Number(session?.user.id));
-//   console.log('result get blog by id action: ', result)
-//   if (result) {
-//     return result;
-//   } else {
-//     throw new Error('Blog not found');
-//   }
-// }
+export const handleUpdateBlog = async (blogId: number, prevState: FormState, formData: FormData): Promise<FormState> => {
+  console.log("update existing blog")
+  const { errors, newBlogData } = await processCheckingInput(formData);
+
+  if (errors && Object.keys(errors).length > 0) {
+    return {
+      ...prevState,
+      success: false,
+      payload: formData,
+      errors: { ...prevState.errors, ...errors }
+    }
+  } else {
+    if (!newBlogData) return {
+      ...prevState,
+      errors: { ...prevState.errors, general: "No data to submit" }
+    };
+
+    await updateBlog(blogId, newBlogData, newBlogData.userId);
+    return {
+      ...prevState,
+      errors: null,
+      success: true,
+      payload: formData,
+    }
+  }
+}
+
+

@@ -1,16 +1,13 @@
+import { User } from "next-auth";
 import { db } from "./db";
+import { UserPayload, BlogDataType, BlogPayload } from "@/types";
 // import { waitForDebug } from "./utils";
 
-interface Blog {
-  imageUrl: string;
-  title: string;
-  content: string;
-  userId: number;
-}
+
 
 // queries
 
-export async function getAllBlogs(userId: number, maxLimit?: number, ) {
+export async function getAllBlogs(userId: number, maxLimit?: number,) {
   // we suppose that the current user can see all blogs of all users and he can like any blog. There are also counter for likes and the button is liked or not.
   let limitClause = '';
   if (maxLimit && maxLimit > 0) {
@@ -34,7 +31,7 @@ export async function getAllBlogs(userId: number, maxLimit?: number, ) {
   return maxLimit ? stmt.all(maxLimit, userId) : stmt.all(userId);
 };
 
-export async function getBlogById(blogId: number, userId: number) {
+export async function getBlogById(blogId: number, userId?: number) { // userId is optional, it is not necessary for editing the blog
   const stmt = db.prepare(`SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
     EXISTS(SELECT * FROM likes  
       INNER JOIN users ON likes.user_id = users.id
@@ -56,7 +53,7 @@ export async function getBlogById(blogId: number, userId: number) {
 };
 
 //mutations:
-export async function storeBlog(blog: Blog) {
+export async function storeBlog(blog: BlogPayload) {
   const user = db.prepare('SELECT * FROM users WHERE id = ?');
   const currentUser = user.get(blog.userId);
   if (!currentUser) {
@@ -65,7 +62,7 @@ export async function storeBlog(blog: Blog) {
     const stmt = db.prepare(`
     INSERT INTO blogs (image_url, title, content, user_id)
     VALUES (?, ?, ?, ?)`);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     return stmt.run(blog.imageUrl, blog.title, blog.content, blog.userId);
   }
 
@@ -96,3 +93,34 @@ export async function toggleLikeBlog(blogId: number, userId: number) {
   }
 }
 
+// update blog
+export async function updateBlog(blogId: number, blog: BlogPayload, userId: number) {
+  const currentUser = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) as UserPayload | null;
+  const currentBlog = db.prepare('SELECT * FROM blogs WHERE id = ?').get(blogId) as BlogDataType | null;
+  console.log('Current user:', currentUser, currentBlog);
+  // const result = {status: false}
+  if (!currentUser) {
+    throw new Error('User not found');
+  } else if (!currentBlog) {
+    throw new Error('Blog not found');
+  } else if (currentUser?.id !== currentBlog?.user_id) {
+    throw new Error('You are not authorized to update this blog');
+  } else {
+    const stmt = db.prepare(`
+      UPDATE blogs
+      SET image_url = ?, title = ?, content =?
+      Where id = ?
+   `);
+    const updatedBlog = stmt.run(blog.imageUrl, blog.title, blog.content, blogId);
+    console.log('Updated blog:', updatedBlog);
+    return updateBlog
+  }
+}
+
+// delete blog
+export async function deleteBlog(blogId: number) {
+  const stmt = db.prepare('DELETE FROM blogs WHERE id = ?');
+  const deletedBlog = stmt.run(blogId);
+  console.log('Deleted blog:', deletedBlog);
+  return deletedBlog;
+}

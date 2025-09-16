@@ -8,7 +8,7 @@ export default function ButtonLike({
 }: {
   action: (blogId: number) => Promise<void>;
   blogId: number;
-  isLiked: boolean;
+  isLiked?: boolean;
 }) {
   return (
     <form

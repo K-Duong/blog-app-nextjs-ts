@@ -3,19 +3,14 @@ import bcrypt from 'bcryptjs';
 import { db } from "./db";
 
 import { MINLENGTHPW } from '@/constants';
-import { waitForDebug } from './utils';
+import { UserCheck, UserPayload } from '@/types/user';
+// import { waitForDebug } from './utils';
 
 const hashPw = async (password: string) : Promise<string> => await bcrypt.hash(password, 10)
 export const verifyPw = async (password: string, hashedPw: string)=> await bcrypt.compare(password, hashedPw) 
 
 //create user
-type UserCheck = { username: string, email: string };
-interface UserPayload {
-  id: number,
-  email: string,
-  username: string,
-  password: string
-};
+
 
 export const createUser = async (userPayload: UserPayload) => {
   try {
@@ -70,7 +65,7 @@ export const createUser = async (userPayload: UserPayload) => {
 export const getUserByEmail = async (email: string) : Promise<UserPayload | null>=> {
   const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
   const user = stmt.get(email) as UserPayload ;
-  await waitForDebug(3000); // simulate delay
+  // await waitForDebug(3000); // simulate delay
   if(!user) return null
   return user 
 }

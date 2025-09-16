@@ -2,12 +2,12 @@
 import { revalidatePath } from "next/cache";
 
 import { toggleLikeBlog } from "@/libs/blogs";
-import { getCurrentUserId } from "@/libs/auth";
+import { getCurrentUser } from "@/libs/auth";
 
 export default async function actionToggleLike(blogId: number) {
-  const userId = await getCurrentUserId() 
+  const user = await getCurrentUser() 
   try {
-   const result = await toggleLikeBlog(blogId, userId); 
+   const result = await toggleLikeBlog(blogId, Number(user.id)); 
    console.log('Like toggled, result:', result);
    
    if(result) {

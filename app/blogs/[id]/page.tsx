@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
 
 import { BlogType } from "@/types";
 import { getBlogById } from "@/libs/blogs";
 import { formatDate } from "@/libs/formatDate";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getCurrentUser } from "@/libs/auth";
+
+import { ButtonModifyBlog } from "@/components/buttons/ButtonModify";
 
 import styles from "./page.module.css";
 
@@ -15,14 +16,10 @@ export default async function BlogPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const session = await getServerSession(authOptions);
+  const user = await getCurrentUser();
   let blogData: BlogType;
   try {
-    // id mal formatté
-    // id not found
-    // id found, server error
-
-    blogData = (await getBlogById(Number(id), Number(session?.user.id))) as BlogType;
+    blogData = (await getBlogById(Number(id), Number(user.id))) as BlogType;
     console.log("Blog data:", blogData);
   } catch (e) {
     notFound();
@@ -31,22 +28,34 @@ export default async function BlogPage({
   return (
     <article className={styles.article}>
       <header className={styles.header}>
-        <h1>{blogData.title}</h1>
-        <p>
-          Created by <span className={styles.author}>{blogData.author}</span> at{" "}
-          <span className={styles.createdAt}>
-            {formatDate(blogData.createdAt)}
-          </span>
-        </p>
-        <p>Likes: {blogData.likes}</p>
+        <div className={styles.textHeader}>
+          {" "}
+          <h1 className={styles.title}>{blogData.title}</h1>
+          <div className={styles.meta}>
+          <div className={styles.info}>
+            <p>
+              Created by{" "}
+              <strong className={styles.author}>{blogData.author}</strong> at{" "}
+              <span className={styles.createdAt}>
+                {formatDate(blogData.createdAt)}
+              </span>
+            </p>
+            <p>Likes: {blogData.likes}</p>
+          </div>
+          {user.username === blogData.author && (
+            <div className={styles.modify}>
+              <ButtonModifyBlog blog={blogData} />
+            </div>
+          )}</div>
+        </div>
       </header>
       <div className={styles.imageContainer}>
         <Image
           src={blogData.imageUrl}
           alt={blogData.title}
-          loading="lazy"
           width={500}
           height={500}
+          priority={true}
         />
       </div>
       <section className={styles.content}>

@@ -8,19 +8,20 @@ import styles from "./inputField.module.css";
 import { LIMITSIZE } from "@/constants";
 
 export default function ImageField({
+  defaultValue,
   field,
   error,
   previewUrl,
   setPreviewUrl,
 }: {
+  defaultValue: string;
   field: FieldType;
   error?: string;
   previewUrl: string;
   setPreviewUrl: (url: string) => void;
 }) {
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  console.log("ImageField defaultValue:", defaultValue);
   useEffect(() => {
     if (error) {
       setErrorMessage(error);
@@ -58,9 +59,12 @@ export default function ImageField({
         name={field.name}
         onChange={handleImageChange}
       />
+      {defaultValue && (
+        <input type="hidden" name="existingImageUrl" value={defaultValue} />
+      )}
       {errorMessage.length > 0 && (
-            <span className={styles.errorText}>{errorMessage}</span>
-          )}
+        <span className={styles.errorText}>{errorMessage}</span>
+      )}
       {previewUrl && <ImagePreview imageUrl={previewUrl} />}
     </>
   );
