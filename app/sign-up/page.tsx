@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { redirect } from "next/navigation";
 
-import {FormContainer, Button} from "@/components";
+import { FormContainer, Button } from "@/components";
 
 import { isValidEmail, isValidPw, isValidUsername } from "@/libs/utils";
 import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";
 
 import styles from "./page.module.css";
-
-
+import { signIn } from "next-auth/react";
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -55,6 +54,11 @@ export default function SignIn() {
       if (res.ok && res.status === 201) {
         setIsSubmitted(true);
         setErrorMessage("");
+        await signIn("credentials", {
+          redirect: false,
+          email: email,
+          password: password,
+        });
         form.reset();
       } else {
         throw new Error(data.error);
