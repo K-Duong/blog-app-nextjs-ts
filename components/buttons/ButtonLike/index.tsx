@@ -1,5 +1,5 @@
 'use client';
-import styles from "./buttonLike.module.css";
+import styles from "./styles.module.css";
 
 export default function ButtonLike({
   action,

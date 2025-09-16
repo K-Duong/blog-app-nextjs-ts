@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from './button.module.css'
+import styles from './styles.module.css'
+
 type ButtonProps= React.ButtonHTMLAttributes<HTMLButtonElement>;
 type ButtonPropsWithChildren = React.PropsWithChildren<ButtonProps>
 

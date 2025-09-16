@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 
 import { FieldType } from "@/types";
-import ImagePreview from "./ImagePreview";
-
-import styles from "./inputField.module.css";
 import { LIMITSIZE } from "@/constants";
+import ImagePreview from "../../../imagePreview";
+
+import styles from "../styles.module.css";
 
 export default function ImageField({
   defaultValue,

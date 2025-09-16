@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { usePathname } from "next/navigation";
 
-import styles from "./linkWrapper.module.css";
+import styles from "./styles.module.css";
 
 export default function LinkWrapper({
   href,

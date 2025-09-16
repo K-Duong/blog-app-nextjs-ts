@@ -5,15 +5,12 @@ import { redirect } from "next/navigation";
 
 import { FIELDS } from "@/constants";
 import { BlogType } from "@/types";
-
 import { handleCreateBlog, handleUpdateBlog } from "@/actions/blogs";
 
-import InputField from "./InputField";
-import Button from "./Button";
-import ImageField from "./ImageField";
-import TextareaField from "./TextareaField";
+import { InputField, ImageField, TextareaField } from "../formFields";
+import Button from "../../buttons/ButtonWrapper";
 
-import styles from "./form.module.css";
+import styles from "./styles.module.css";
 
 export default function FormNewBlog({ blog }: { blog?: BlogType }) {
   const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -62,12 +59,12 @@ export default function FormNewBlog({ blog }: { blog?: BlogType }) {
     >
       {Object.keys(FIELDS).map((field) => {
         const fieldValue = FIELDS[field];
-        
+
         if (field === "image") {
           console.log(state);
           return (
             <ImageField
-              defaultValue = {(state.payload?.get(`image`) as string) || ""}
+              defaultValue={(state.payload?.get(`image`) as string) || ""}
               key={field}
               field={fieldValue}
               error={
@@ -114,8 +111,17 @@ export default function FormNewBlog({ blog }: { blog?: BlogType }) {
         }
       })}
       <div className={styles.cta}>
-        <Button type="submit">{blog && blog.id > 0  ? 'Update blog' : 'Create new post'}</Button>
-        {blog && blog.id > 0 ? <Button type="button" onClick={() => redirect(`/blogs`)}> Cancel </Button> : <Button type="reset">Reset</Button>}
+        <Button type="submit">
+          {blog && blog.id > 0 ? "Update blog" : "Create new post"}
+        </Button>
+        {blog && blog.id > 0 ? (
+          <Button type="button" onClick={() => redirect(`/blogs`)}>
+            {" "}
+            Cancel{" "}
+          </Button>
+        ) : (
+          <Button type="reset">Reset</Button>
+        )}
       </div>
     </form>
   );

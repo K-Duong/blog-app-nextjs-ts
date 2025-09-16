@@ -1,10 +1,10 @@
 // 'use client'
 
 import { FieldType } from "@/types";
-// import Button from "./Button";
-import InputField from "./InputField";
 
-import styles from "./formContainer.module.css";
+import {InputField} from "../formFields";
+
+import styles from "./styles.module.css";
 
 export default function FormContainer({
   fields,

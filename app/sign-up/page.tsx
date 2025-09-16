@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { redirect } from "next/navigation";
 
-import FormContainer from "@/components/FormContainer";
-import Button from "@/components/Button";
+import {FormContainer, Button} from "@/components";
 
 import { isValidEmail, isValidPw, isValidUsername } from "@/libs/utils";
 import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";

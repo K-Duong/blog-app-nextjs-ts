@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import styles from "./inputField.module.css"
+import styles from "./styles.module.css";
 
 export default function ImagePreview({imageUrl} : {imageUrl: string}) {
   return (

@@ -4,9 +4,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 
-import LinkWrapper from "@/components/LinkWrapper";
-import Button from "@/components/Button";
-import FormContainer from "@/components/FormContainer";
+import {LinkWrapper, Button, FormContainer} from "@/components";
+
 import { ERRORMESSAGES, LOGINFIELDS, PATHS } from "@/constants";
 import { isValidEmail, isValidPw } from "@/libs/utils";
 
@@ -28,7 +27,7 @@ export default function Login() {
       return;
     }
 
-    // send payload to db ()
+    // send payload to db 
     const result = await signIn("credentials", {
       redirect: false,
       email: payload.email,

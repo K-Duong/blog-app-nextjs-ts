@@ -1,4 +1,4 @@
-import FormNewBlog from "@/components/Form";
+import {FormNewBlog} from "@/components";
 
 import styles from './page.module.css'
 

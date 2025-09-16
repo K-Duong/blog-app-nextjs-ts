@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import logo from "../assets/logo.png";
+import logo from "@/assets/logo.png";
 import { PATHS } from "@/constants";
-import LinkWrapper from "./LinkWrapper";
-import Button from "./Button";
+import LinkWrapper from "../link";
+import {Button} from "../buttons";
 
-import styles from "./navbar.module.css";
+import styles from "./styles.module.css";
 
 export default function Navbar() {
   const { data: session } = useSession();

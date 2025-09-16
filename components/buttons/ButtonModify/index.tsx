@@ -1,23 +1,13 @@
 'use client'
-import { notFound, redirect } from "next/navigation"
-import { useSession } from "next-auth/react";
+import {  redirect } from "next/navigation"
 
-import { BlogType } from "@/types";
-import Button from "@/components/Button"
+import Button from "@/components/buttons/ButtonWrapper"
 
-export function ButtonModifyBlog ({blog}: {blog: BlogType}) {
-  const session = useSession();
-  // const isAuthor = session?.data?.user?.username === blog.author;
-  // console.log("isAuthor:", isAuthor);
-
+export default function ButtonModifyBlog ({blogId}: {blogId: number}) {
    const handleOpenEditor = (e: React.MouseEvent<HTMLButtonElement>) => {
     // console.log("open editor for blog id:", blogId);
     e.stopPropagation();
-    // if(isAuthor) {
-      redirect(`/blogs/${blog.id}/edit`);
-    // } else {
-    //   notFound();
-    // }
+      redirect(`/blogs/${blogId}/edit`);
   };
   return (
     <Button type="button" onClick={handleOpenEditor}> Edit </Button>

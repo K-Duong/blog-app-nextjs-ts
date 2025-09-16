@@ -4,7 +4,7 @@ import { BlogType } from "@/types";
 import { getBlogById } from "@/libs/blogs";
 import { getCurrentUser } from "@/libs/auth";
 
-import FormNewBlog from "@/components/Form";
+import {FormNewBlog} from "@/components";
 
 import styles from './page.module.css'
 

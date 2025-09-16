@@ -2,7 +2,7 @@ import { BlogType } from "@/types";
 import { getAllBlogs } from "@/libs/blogs"
 import { getCurrentUser } from "@/libs/auth";
 
-import Blogs from "@/components/Blogs";  
+import {BlogList} from "@/components";  
 
 import styles from "./page.module.css"
 
@@ -13,7 +13,7 @@ export default async function BlogsPage(){
   return (
     <div className={styles.contain}>
       <h1>{user && `Welcome back ${user?.username}. `}</h1>
-      <Blogs blogs={blogs} />
+      <BlogList blogs={blogs} />
     </div>
   )
 }

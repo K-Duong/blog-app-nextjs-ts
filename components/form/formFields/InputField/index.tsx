@@ -1,22 +1,29 @@
-import { FieldType } from "@/types";
-import styles from "./inputField.module.css";
+"'use client';"
 
-export default function TextareaField({
+import React from "react";
+
+import { FieldType } from "@/types";
+import styles from "../styles.module.css";
+
+export default function InputField({
   field,
   error,
   defaultValue,
 }: {
   field: FieldType;
-  error: string;
-  defaultValue: string,
+  error?: string;
+  defaultValue?: string
 }) {
+ 
+ 
   return (
     <div key={field.id} className={styles.input}>
       <label htmlFor={field.name}>{field.label}</label>
-      <textarea
-        className={
+      <input
+        className={ error &&
           error.length > 0 ? `${styles.input} ${styles.error}` : undefined
         }
+        type={field.type}
         id={field.id}
         name={field.name}
         defaultValue={defaultValue}
