@@ -68,6 +68,7 @@ export default function ButtonDeleteBlog({ blogId }: { blogId: number }) {
 
       <Modal
         isOpen={isOpenedModal}
+        setIsOpenedModal={setIsOpenedModal}
         actions={
           <ActionsModal
             setIsOpenedModal={setIsOpenedModal}

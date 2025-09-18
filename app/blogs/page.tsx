@@ -9,7 +9,7 @@ import styles from "./page.module.css"
 export default async function BlogsPage(){
   const user = await getCurrentUser()
   const blogs = await getAllBlogs(Number(user.id)) as BlogType[];
-  
+  console.log("render blogs page")
   return (
     <div className={styles.contain}>
       <h1>{user && `Welcome back ${user?.username}. `}</h1>

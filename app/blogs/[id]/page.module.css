@@ -19,11 +19,15 @@
 }
 .imageContainer {
   width: 60%;
-  max-height: 500px;
+  max-height: 300px;
   height: auto;
   align-self: center;
   border-radius: 8px;
+  
+  display: flex;
+  justify-content: center;
 }
+
 
 .imageContainer img {
   border-radius: 8px;

@@ -1,0 +1,7 @@
+.photoContainer {
+  position: relative;
+  width: auto;
+}
+.photoContainer :global(img) {
+  object-fit: contain;
+}

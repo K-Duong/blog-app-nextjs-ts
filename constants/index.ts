@@ -29,8 +29,7 @@ export const PATHS = {
   SIGNUP: {
     path: '/sign-up',
     name: 'Sign Up'
-  }
-
+  },
 }
 
 export const FIELDS: Record<string, FieldType> = {

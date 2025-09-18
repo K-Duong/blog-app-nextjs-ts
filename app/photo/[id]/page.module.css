@@ -1,0 +1,13 @@
+.photoContainer {
+position: relative;       
+  width: auto;             
+  height: 100vh;            
+  display: flex;            
+  justify-content: center;  
+  align-items: center;     
+  background-color: white;  
+  overflow: hidden
+}
+.photoContainer :global(img) {
+  object-fit: contain;  
+}
