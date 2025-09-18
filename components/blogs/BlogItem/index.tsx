@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
@@ -9,6 +10,7 @@ import { formatDate, hourFromNow, isDisplayedByHour } from "@/libs/formatDate";
 import {ButtonDeleteBlog, ButtonLike, ButtonModifyBlog} from "../../buttons";
 
 import styles from "./styles.module.css";
+// import { useState } from "react";
 
 export default function BlogItem({
   isAuthor,
@@ -19,8 +21,10 @@ export default function BlogItem({
   blog: BlogType;
   action: (blogId: number) => Promise<void>;
 }) {
+  // const [isOpenedModal, setIsOpenedModal] = useState(false);
 
   return (
+    <>
     <article
       className={styles.blog}
       onClick={() => redirect(`/blogs/${blog.id}`)}
@@ -66,6 +70,8 @@ export default function BlogItem({
         </div>}
       </div>
     </article>
+    
+    </>
   );
 }
 

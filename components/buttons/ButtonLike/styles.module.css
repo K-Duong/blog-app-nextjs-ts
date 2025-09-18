@@ -13,6 +13,7 @@
 .buttonLike:hover svg,
 .liked .buttonLike svg {
   fill: #e32195;
+  cursor: pointer;
 }
 
 .liked .buttonLike:hover svg {
