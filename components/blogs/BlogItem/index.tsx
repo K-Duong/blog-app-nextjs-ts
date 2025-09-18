@@ -6,7 +6,7 @@ import { BlogType } from "@/types";
 
 import { formatDate, hourFromNow, isDisplayedByHour } from "@/libs/formatDate";
 
-import {ButtonLike, ButtonModifyBlog} from "../../buttons";
+import {ButtonDeleteBlog, ButtonLike, ButtonModifyBlog} from "../../buttons";
 
 import styles from "./styles.module.css";
 
@@ -60,7 +60,10 @@ export default function BlogItem({
           <ButtonLike action={action} isLiked={blog.isLiked} blogId={blog.id} />
           <p>{blog.likes}</p>
         </div>
-        {isAuthor && <ButtonModifyBlog blogId={blog.id} />}
+        {isAuthor && <div className={styles.btns}>
+           <ButtonModifyBlog blogId={blog.id} />
+           <ButtonDeleteBlog blogId={blog.id} />
+        </div>}
       </div>
     </article>
   );

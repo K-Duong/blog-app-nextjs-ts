@@ -1,12 +1,8 @@
-import { User } from "next-auth";
 import { db } from "./db";
 import { UserPayload, BlogDataType, BlogPayload } from "@/types";
 // import { waitForDebug } from "./utils";
 
-
-
 // queries
-
 export async function getAllBlogs(userId: number, maxLimit?: number,) {
   // we suppose that the current user can see all blogs of all users and he can like any blog. There are also counter for likes and the button is liked or not.
   let limitClause = '';
@@ -68,31 +64,6 @@ export async function storeBlog(blog: BlogPayload) {
 
 }
 
-export async function toggleLikeBlog(blogId: number, userId: number) {
-  const user = db.prepare('SELECT * FROM users WHERE id = ?');
-  const currentUser = user.get(userId);
-  if (!currentUser) {
-    // throw error 404 user not found to invite the user to login to like the blog
-    throw new Error('User not found');
-  } else {
-    const stmt = db.prepare('SELECT * FROM likes WHERE blog_id = ? AND user_id = ?');
-    const existingLike = stmt.get(blogId, userId);
-    if (existingLike) {
-      // unlike 
-      const deleteStmt = db.prepare('DELETE FROM likes WHERE blog_id = ? AND user_id = ?');
-      const result = deleteStmt.run(blogId, userId);
-      // console.log('Unlike result:', result);
-      return { liked: false }
-    } else {
-      // like 
-      const insertStmt = db.prepare('INSERT INTO likes (blog_id, user_id) VALUES (?, ?)');
-      const result = insertStmt.run(blogId, userId);
-      // console.log('Like result:', result);
-      return { liked: true }
-    };
-  }
-}
-
 // update blog
 export async function updateBlog(blogId: number, blog: BlogPayload, userId: number) {
   const currentUser = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) as UserPayload | null;
@@ -123,4 +94,29 @@ export async function deleteBlog(blogId: number) {
   const deletedBlog = stmt.run(blogId);
   console.log('Deleted blog:', deletedBlog);
   return deletedBlog;
+}
+
+export async function toggleLikeBlog(blogId: number, userId: number) {
+  const user = db.prepare('SELECT * FROM users WHERE id = ?');
+  const currentUser = user.get(userId);
+  if (!currentUser) {
+    // throw error 404 user not found to invite the user to login to like the blog
+    throw new Error('User not found');
+  } else {
+    const stmt = db.prepare('SELECT * FROM likes WHERE blog_id = ? AND user_id = ?');
+    const existingLike = stmt.get(blogId, userId);
+    if (existingLike) {
+      // unlike 
+      const deleteStmt = db.prepare('DELETE FROM likes WHERE blog_id = ? AND user_id = ?');
+      const result = deleteStmt.run(blogId, userId);
+      // console.log('Unlike result:', result);
+      return { liked: false }
+    } else {
+      // like 
+      const insertStmt = db.prepare('INSERT INTO likes (blog_id, user_id) VALUES (?, ?)');
+      const result = insertStmt.run(blogId, userId);
+      // console.log('Like result:', result);
+      return { liked: true }
+    };
+  }
 }

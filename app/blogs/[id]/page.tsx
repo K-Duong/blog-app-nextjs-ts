@@ -6,7 +6,7 @@ import { getBlogById } from "@/libs/blogs";
 import { formatDate } from "@/libs/formatDate";
 import { getCurrentUser } from "@/libs/auth";
 
-import {ButtonModifyBlog} from "@/components";
+import {Button, ButtonModifyBlog, ButtonDeleteBlog} from "@/components";
 
 import styles from "./page.module.css";
 
@@ -45,6 +45,7 @@ export default async function BlogPage({
           {user.username === blogData.author && (
             <div className={styles.modify}>
               <ButtonModifyBlog blogId={blogData.id} />
+              <ButtonDeleteBlog blogId={blogData.id} />
             </div>
           )}</div>
         </div>
