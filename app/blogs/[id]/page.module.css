@@ -14,9 +14,16 @@
 }
 .meta {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+
+.meta .btns {
+  display: flex;
+  column-gap: 1rem;
+}
+
 .imageContainer {
   width: 60%;
   max-height: 300px;
@@ -32,4 +39,9 @@
 .imageContainer img {
   border-radius: 8px;
   object-fit: cover;
+}
+
+.content {
+  white-space: pre-wrap;
+  text-align: justify;
 }

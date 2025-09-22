@@ -45,7 +45,7 @@ export default async function BlogPage({
               <p>Likes: {blogData.likes}</p>
             </div>
             {user.username === blogData.author && (
-              <div className={styles.modify}>
+              <div className={styles.btns}>
                 <ButtonModifyBlog blogId={blogData.id} />
                 <ButtonDeleteBlog blogId={blogData.id} />
               </div>
