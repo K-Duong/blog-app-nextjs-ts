@@ -21,8 +21,6 @@ export default function BlogItem({
   blog: BlogType;
   action: (blogId: number) => Promise<void>;
 }) {
-  // const [isOpenedModal, setIsOpenedModal] = useState(false);
-
   return (
     <>
     <article

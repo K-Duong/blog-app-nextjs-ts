@@ -21,7 +21,6 @@ export default function ImageField({
   setPreviewUrl: (url: string) => void;
 }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  console.log("ImageField defaultValue:", defaultValue);
   useEffect(() => {
     if (error) {
       setErrorMessage(error);

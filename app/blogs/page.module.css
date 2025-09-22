@@ -1,3 +1,4 @@
+.contain,
 .contain h1 {
   margin: var(--margin-top);
   display: flex;
@@ -5,3 +6,4 @@
   justify-content: center;
   align-items: center;
 }
+

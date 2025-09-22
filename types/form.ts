@@ -10,7 +10,7 @@ export interface FieldType {
   label: string;
   type: string;
   name: string;
-  validationRules: ValidationRulesType;
+  validationRules?: ValidationRulesType;
 }
 export interface FormState {
   loading: boolean;

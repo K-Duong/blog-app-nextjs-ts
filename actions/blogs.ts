@@ -5,11 +5,16 @@ import { FIELDS } from "@/constants";
 import { uploadImage } from "@/libs/cloudinary";
 import { storeBlog, updateBlog } from "@/libs/blogs";
 import { getCurrentUser } from "@/libs/auth";
+import { redirect } from "next/navigation";
 
 // helper function to handle the process of blog'validation and upload image to cloudinary
 const processCheckingInput = async (formData: FormData) => {
   //get current user id
   const user = await getCurrentUser();
+  if (!user) {
+    redirect('/login');
+  }
+  
   const errors: Record<string, string> = {};
   let imageUrl: string | null = '';
 
@@ -22,7 +27,7 @@ const processCheckingInput = async (formData: FormData) => {
     const rules = FIELDS[fieldName].validationRules;
     const value = payload[fieldName];
     if (
-      rules.required &&
+      rules?.required &&
       (!value || (typeof value === "string" && value?.trim().length === 0)) || // Check for empty string or null
       // (value instanceof File && value?.size === 0) || //check for empty file image
       value === null) {

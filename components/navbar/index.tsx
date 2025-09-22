@@ -6,13 +6,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import logo from "@/assets/logo.png";
 import { PATHS } from "@/constants";
 import LinkWrapper from "../link";
-import {Button} from "../buttons";
+import { Button } from "../buttons";
 
 import styles from "./styles.module.css";
 
 export default function Navbar() {
-  const { data: session } = useSession();
-  // console.log("Navbar session:", session);
+  const { data: session, update } = useSession();
+
 
   return (
     <nav className={styles.nav}>

@@ -61,7 +61,7 @@ export default function FormNewBlog({ blog }: { blog?: BlogType }) {
         const fieldValue = FIELDS[field];
 
         if (field === "image") {
-          console.log(state);
+          // console.log(state);
           return (
             <ImageField
               defaultValue={(state.payload?.get(`image`) as string) || ""}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { BlogType } from "@/types";
 import { getBlogById } from "@/libs/blogs";
@@ -18,6 +18,7 @@ export default async function BlogPage({
 }) {
   const { id } = await params;
   const user = await getCurrentUser();
+  if(!user) redirect ('/login');
   let blogData: BlogType;
   try {
     blogData = (await getBlogById(Number(id), Number(user.id))) as BlogType;

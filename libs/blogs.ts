@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { UserPayload, BlogDataType, BlogPayload } from "@/types";
+import { UserPayload, BlogDataType, BlogPayload, BlogType } from "@/types";
 // import { waitForDebug } from "./utils";
 
 // queries
@@ -10,9 +10,8 @@ export async function getAllBlogs(userId: number, maxLimit?: number,) {
     limitClause = `LIMIT ?`
   };
 
-  const stmt = db.prepare(
-    // suppose that the current user is user with id = 1
-    `SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
+  const stmt = db.prepare( `
+    SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
     EXISTS (SELECT * FROM likes  
       INNER JOIN users ON likes.user_id = users.id
       WHERE likes.blog_id = blogs.id AND likes.user_id = ?) as isLiked
@@ -26,6 +25,7 @@ export async function getAllBlogs(userId: number, maxLimit?: number,) {
   // await waitForDebug(3000) // simulate delay
   return maxLimit ? stmt.all(maxLimit, userId) : stmt.all(userId);
 };
+
 
 export async function getBlogById(blogId: number, userId?: number) { // userId is optional, it is not necessary for editing the blog
   const stmt = db.prepare(`SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
@@ -48,7 +48,24 @@ export async function getBlogById(blogId: number, userId?: number) { // userId i
   }
 };
 
-//mutations:
+export const sortBlogsByType = async (userId: number, type: string, order: string)=> {
+  console.log('type, order', type, order)
+    const stmt = db.prepare( `
+    SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
+    EXISTS (SELECT * FROM likes  
+      INNER JOIN users ON likes.user_id = users.id
+      WHERE likes.blog_id = blogs.id AND likes.user_id = ?) as isLiked
+    FROM blogs
+    INNER JOIN users ON blogs.user_id = users.id
+    LEFT JOIN likes ON likes.blog_id = blogs.id
+    GROUP BY blogs.id
+    ORDER BY ${type} ${order}`
+  );
+  return stmt.all(userId);
+}
+
+////MUTATIONS
+// create new blog:
 export async function storeBlog(blog: BlogPayload) {
   const user = db.prepare('SELECT * FROM users WHERE id = ?');
   const currentUser = user.get(blog.userId);
