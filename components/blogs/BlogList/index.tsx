@@ -1,16 +1,16 @@
 "use client";
 
-import { useOptimistic, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import { BlogType } from "@/types";
 import actionToggleLike from "@/actions/like";
 
+import { SelectField } from "@/components/form";
 import BlogItem from "../BlogItem";
 
 import styles from "./styles.module.css";
-import { SelectField } from "@/components/form";
-import { useRouter } from "next/navigation";
 
 export default function BlogList({ blogs }: { blogs: BlogType[] }) {
   const session = useSession();
@@ -22,7 +22,6 @@ export default function BlogList({ blogs }: { blogs: BlogType[] }) {
   const [nameOrder, setNameOrder] = useState("DESC");
 
   const fetchOrderBlogs = async (type: string, order: string) => {
-    console.log(type, order);
     const res = await fetch(`/api/blogs?type=${type}&order=${order}`, {
       method: "GET",
     });
@@ -32,7 +31,6 @@ export default function BlogList({ blogs }: { blogs: BlogType[] }) {
     }
 
     const { data } = await res.json();
-    console.log("data", data);
     setBlogsList(data);
     return data;
   };
@@ -40,8 +38,10 @@ export default function BlogList({ blogs }: { blogs: BlogType[] }) {
   const updateLikesBlog = (blogIdToUpdate: number) => {
     setBlogsList((prevBlogs) => {
       if (!prevBlogs) return null;
+      // update Like
       const index = prevBlogs.findIndex((blog) => blog.id === blogIdToUpdate);
       if (index === -1) return prevBlogs;
+
       const blogToUpdate = prevBlogs[index];
       const updatedBlog = {
         ...blogToUpdate,
@@ -52,6 +52,15 @@ export default function BlogList({ blogs }: { blogs: BlogType[] }) {
       };
       const newBlogs = [...prevBlogs];
       newBlogs[index] = updatedBlog;
+
+      // update sorted list
+      if (typeOrder === "likes") {
+        return [...newBlogs].sort((blog1, blog2) =>
+          nameOrder === "DESC"
+            ? blog2.likes - blog1.likes
+            : blog1.likes - blog2.likes
+        );
+      }
       return newBlogs;
     });
   };
