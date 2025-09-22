@@ -11,7 +11,7 @@ import { JWT } from "next-auth/jwt"
 export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60, 
+    maxAge: 24 * 60 * 60, 
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -63,7 +63,7 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id as string;
         session.user.username= token.username as string;
       };
-      console.log("session callback session:", session);
+      // console.log("session callback session:", session);
       return session;
     }
   
