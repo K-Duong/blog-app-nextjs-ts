@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { MdLogin } from "react-icons/md";
 
-import {LinkWrapper, Button, FormContainer} from "@/components";
+import {LinkWrapper, Button, FormContainer, IconProvider} from "@/components";
 
 import { ERRORMESSAGES, LOGINFIELDS, PATHS } from "@/constants";
 import { isValidEmail, isValidPw } from "@/libs/utils";
@@ -52,6 +53,9 @@ export default function Login() {
         Create a new account
       </LinkWrapper>
       <Button type="submit" className={styles.cta}>
+        <IconProvider>
+          <MdLogin/>
+        </IconProvider>
         Login
       </Button>
     </FormContainer>

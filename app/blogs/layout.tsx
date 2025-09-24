@@ -9,7 +9,7 @@ export default function BlogsLayout({
   return (
     <div>
       
-      <main>{children}</main>
+      {children}
       {/* Modal slot */}
       {modal}
     </div>

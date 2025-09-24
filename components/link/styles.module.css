@@ -1,18 +1,28 @@
-.link{
+.link {
   padding: 0.5rem;
   text-decoration: none;
-  color: white
-}
-
-.link:visited{
   color: white;
 }
 
-.linkActive{
+.link:visited {
+  color: white;
+}
+.link:hover:not(:has(img)) {
+  background-color: var(--foreground);
+  border: 1px solid white;
   border-radius: 5px;
-  background-color: var(--link-active);
-  color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+
+  padding: 0.55rem;
+  transition: all 0.3s;
 }
-.linkActive:visited{
+
+.linkActive:not(:has(img)) {
+  border-radius: 5px;
+  /* background-color: var(--link-active); */
+  color: white;
+  border: 1px solid white;
+}
+.linkActive:visited:not(:has(img)) {
   color: white;
 }

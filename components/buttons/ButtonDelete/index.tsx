@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import { notFound, redirect } from "next/navigation";
+import { MdOutlineDelete } from "react-icons/md";
+import { MdOutlineCancel } from "react-icons/md";
 
 import Modal from "@/components/modal";
 import Button from "../ButtonWrapper";
 
+import IconProvider from "@/components/IconProvider";
 
 function ActionsModal({
   setIsOpenedModal,
@@ -17,29 +20,31 @@ function ActionsModal({
   return (
     <>
       <Button type="button" onClick={handleDelete}>
-        {" "}
+        <IconProvider>
+          <MdOutlineDelete />
+        </IconProvider>
         Delete{" "}
       </Button>
       <Button type="button" onClick={() => setIsOpenedModal(false)}>
         {" "}
+        <IconProvider>
+          <MdOutlineCancel /> 
+        </IconProvider>
         Cancel{" "}
       </Button>
     </>
   );
-};
-
+}
 
 export default function ButtonDeleteBlog({ blogId }: { blogId: number }) {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
 
   const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // open modal to confirm
     setIsOpenedModal(true);
   };
 
   const handleDelete = async () => {
-    //  e.stopPropagation();
     // fetch to delete
     const result = await fetch(`/api/blogs/${blogId}`, {
       method: "DELETE",
@@ -62,7 +67,7 @@ export default function ButtonDeleteBlog({ blogId }: { blogId: number }) {
   return (
     <>
       <Button type="button" onClick={handleOpenModal}>
-        {" "}
+        <MdOutlineDelete />
         Delete{" "}
       </Button>
 

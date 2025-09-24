@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { BsPersonPlus } from "react-icons/bs";
 
-import { FormContainer, Button } from "@/components";
+import { FormContainer, Button, IconProvider } from "@/components";
 
 import { isValidEmail, isValidPw, isValidUsername } from "@/libs/utils";
 import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";
@@ -23,7 +24,7 @@ export default function SignIn() {
       string,
       string
     >;
-    console.log("payload", payload);
+    // console.log("payload", payload);
     const username = payload.username.trim();
     const email = payload.email.trim();
     const password = payload.password;
@@ -48,7 +49,7 @@ export default function SignIn() {
         body: JSON.stringify({ username, email, password }),
       });
       const data = await res.json();
-      console.log("data new user", data, "res", res);
+      // console.log("data new user", data, "res", res);
 
       // validation from db
       if (res.ok && res.status === 201) {
@@ -74,6 +75,7 @@ export default function SignIn() {
   const handleRedirect = () => {
     redirect("/new-blog");
   };
+
   return isSubmitted ? (
     <div className={styles.success}>
       <h1>Thank you</h1>
@@ -89,6 +91,9 @@ export default function SignIn() {
       errorMessage={errorMessage}
     >
       <Button type="submit" className={styles.cta}>
+        <IconProvider>
+          <BsPersonPlus />
+        </IconProvider>
         Create new account
       </Button>
     </FormContainer>

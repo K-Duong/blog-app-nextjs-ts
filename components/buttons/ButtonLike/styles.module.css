@@ -10,7 +10,12 @@
   stroke: #e32195;
 }
 
-.buttonLike:hover svg,
+.buttonLike:hover svg {
+  fill: #e32195;
+  cursor: pointer;
+  transition: all 0.2s
+}
+
 .liked .buttonLike svg {
   fill: #e32195;
   cursor: pointer;

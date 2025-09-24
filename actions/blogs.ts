@@ -72,7 +72,7 @@ const processCheckingInput = async (formData: FormData) => {
 }
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
-  console.log("create new blog")
+  // console.log("create new blog")
   const { errors, newBlogData } = await processCheckingInput(formData);
 
   if (errors && Object.keys(errors).length > 0) {

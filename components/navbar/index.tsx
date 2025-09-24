@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { MdLogout } from "react-icons/md";
+import { MdLogin } from "react-icons/md";
 
 import logo from "@/assets/logo.png";
 import { PATHS } from "@/constants";
@@ -9,10 +11,10 @@ import LinkWrapper from "../link";
 import { Button } from "../buttons";
 
 import styles from "./styles.module.css";
+import IconProvider from "../IconProvider";
 
 export default function Navbar() {
-  const { data: session, update } = useSession();
-
+  const { data: session } = useSession();
 
   return (
     <nav className={styles.nav}>
@@ -27,8 +29,11 @@ export default function Navbar() {
 
       <div className={styles.links}>
         {!session ? (
-          <Button type="button" onClick={() => signIn()}>
-            {PATHS.LOGIN.name}
+          <Button  type="button" onClick={() => signIn()}>
+              <IconProvider>
+                <MdLogin />
+              </IconProvider>
+              {PATHS.LOGIN.name}
           </Button>
         ) : (
           <>
@@ -39,7 +44,10 @@ export default function Navbar() {
               {PATHS.NEWBLOG.name}
             </LinkWrapper>
             <Button type="button" onClick={() => signOut()}>
-              Log Out
+                <IconProvider>
+                  <MdLogout />
+                  Logout
+                </IconProvider>
             </Button>
           </>
         )}

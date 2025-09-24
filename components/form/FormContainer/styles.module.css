@@ -12,6 +12,7 @@
 }
 .main h1 {
   align-self: center;
+  text-align: center;
 }
 .main .error{
   color: var(--error);

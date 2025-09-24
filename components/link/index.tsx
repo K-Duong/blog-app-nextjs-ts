@@ -15,11 +15,10 @@ export default function LinkWrapper({
   classStyle?: string
 }) {
   const path = usePathname();
-// console.log(classStyle)
   return (
     <Link
       className={ classStyle && classStyle.length > 0 && classStyle ||
-       ( (path === href && path !== '/') ? `${styles.link} ${styles.linkActive}` : `${styles.link}`)
+       ( (path === href) ? `${styles.link} ${styles.linkActive}` : `${styles.link}`)
       }
       href={href}
     >

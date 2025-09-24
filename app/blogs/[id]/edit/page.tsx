@@ -17,7 +17,7 @@ export default async function EditBlogPage({
   const user = await getCurrentUser();
 
   const blogData = await getBlogById(Number(id)) as BlogType | null;
-  if (!blogData || (blogData.author !== user.username ) ) {
+  if (!blogData || (blogData.author !== user?.username ) ) {
     notFound();
   }
   // console.log("Blog data to edit:", blogData);

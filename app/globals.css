@@ -1,6 +1,6 @@
 :root {
   --background: #f3e8ff;
-  --foreground: rgba(72, 37, 72, 0.752);
+  --foreground: #482548c0;
   --button-default: #d93670;
   --button-hover: #ba1c54;
   --button-active: #9f0a3e;
@@ -21,7 +21,9 @@
 
   --text-md: 1rem;
 
-  --error: #df1e1d
+  --error: #df1e1d;
+
+  --border-radius-m: 5px
 }
 html,
 body {
@@ -32,9 +34,27 @@ body {
   margin: auto;
   max-width: 1024px;
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 h1{
   margin: 0
+}
+
+select {
+  flex: 1;
+  border: 1px solid #482548c0;
+  background: white;
+  padding: 0.5rem;
+  border-radius: var(--border-radius-m);
+  transition: 0.4s;
+}
+
+select:hover,
+select:focus {
+  background: #dddddd;
 }
 

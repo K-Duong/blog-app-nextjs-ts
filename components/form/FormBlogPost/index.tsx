@@ -2,6 +2,9 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import { MdOutlineCancel } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
+import { RiResetLeftFill } from "react-icons/ri";
 
 import { FIELDS } from "@/constants";
 import { BlogType } from "@/types";
@@ -9,6 +12,7 @@ import { handleCreateBlog, handleUpdateBlog } from "@/actions/blogs";
 
 import { InputField, ImageField, TextareaField } from "../formFields";
 import Button from "../../buttons/ButtonWrapper";
+import IconProvider from "@/components/IconProvider";
 
 import styles from "./styles.module.css";
 
@@ -23,7 +27,7 @@ export default function FormNewBlog({ blog }: { blog?: BlogType }) {
   });
   useEffect(() => {
     if (blog && Object.keys(blog).length > 0) {
-      console.log("set default values for update blog form");
+      // console.log("set default values for update blog form");
       const formData = new FormData();
       formData.set("title", blog.title);
       formData.set("content", blog.content);
@@ -112,15 +116,25 @@ export default function FormNewBlog({ blog }: { blog?: BlogType }) {
       })}
       <div className={styles.cta}>
         <Button type="submit">
+          <IconProvider>
+            <FaCheck />
+          </IconProvider>
           {blog && blog.id > 0 ? "Update blog" : "Create new post"}
         </Button>
         {blog && blog.id > 0 ? (
           <Button type="button" onClick={() => redirect(`/blogs`)}>
-            {" "}
+            <IconProvider>
+              <MdOutlineCancel />
+            </IconProvider>
             Cancel{" "}
           </Button>
         ) : (
-          <Button type="reset">Reset</Button>
+          <Button type="reset">
+            <IconProvider>
+              <RiResetLeftFill />
+            </IconProvider>
+            Reset
+          </Button>
         )}
       </div>
     </form>

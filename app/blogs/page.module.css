@@ -1,9 +1,12 @@
-.contain,
-.contain h1 {
+.contain {
   margin: var(--margin-top);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.contain h1 {
+  margin-bottom: 1rem;
 }
 

@@ -5,16 +5,17 @@
   align-items: center;
   justify-content: space-between;
   max-width: 1024px;
-  padding: 0.5rem ;
+  padding: 0.5rem;
 }
 
-.links{
+.links {
   margin-right: 1.5rem;
- display: flex;
- column-gap: 1rem;
+  display: flex;
+  column-gap: 1rem;
 }
 
-.logo{
+.logo {
   max-width: 65px;
   height: 65px;
 }
+

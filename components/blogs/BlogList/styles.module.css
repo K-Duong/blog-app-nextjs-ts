@@ -4,10 +4,11 @@
   flex-direction: column;
   gap: 1rem;
   list-style-type: none;
+  /* remove default padding for ul */
+  padding-inline-start: 0;
 }
 
 .sorted {
   display: flex;
   column-gap: 1.5rem;
-
 }

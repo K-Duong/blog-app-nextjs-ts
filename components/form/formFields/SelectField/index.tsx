@@ -31,7 +31,7 @@ export default function SelectField({
       >
         {items.map((item) => {
           return (
-            <option key={item.value} value={item.value}>
+            <option className={styles.option} key={item.value} value={item.value}>
               {item.label}
             </option>
           );
