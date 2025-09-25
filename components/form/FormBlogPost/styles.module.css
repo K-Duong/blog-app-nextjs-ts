@@ -1,4 +1,6 @@
 .form {
+  align-self: center;
+  width: 100%;
   background-color: var(--form-bg);
   padding: 2rem;
   border-radius: 1rem;

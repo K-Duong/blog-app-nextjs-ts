@@ -1,5 +1,4 @@
-.contain{
-  margin: auto;
+.newBlogContain{
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -7,10 +6,12 @@
   align-items: center;
   width: 80%;
 }
-.contain h1 {
+.newBlogContain h1 {
   margin: var(--margin-top);
 }
 .main{
   width: 100%;
-
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
