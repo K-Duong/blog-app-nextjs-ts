@@ -8,15 +8,20 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     serverActions: {
-      bodySizeLimit:"5mb",
+      bodySizeLimit: "5mb",
     },
   },
-   images: {
+  images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         pathname: `/${cloudname}/**`,
+      },
+      {
+        protocol: 'https',
+        hostname: 'fastly.picsum.photos',
+        pathname: '/**',
       },
     ],
   },

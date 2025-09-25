@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
 
-import { db } from "./db";
+import { db, hashPw } from "./db";
 
 import { MINLENGTHPW } from '@/constants';
 import { UserCheck, UserPayload } from '@/types/user';
 // import { waitForDebug } from './utils';
 
-const hashPw = async (password: string) : Promise<string> => await bcrypt.hash(password, 10)
+// export const hashPw = async (password: string) : Promise<string> => await bcrypt.hash(password, 10)
 export const verifyPw = async (password: string, hashedPw: string)=> await bcrypt.compare(password, hashedPw) 
 
 //create user
