@@ -47,6 +47,10 @@ function initDb() {
 };
 
 async function createSeedUsers() {
+  if (process.env.NODE_ENV !== "development") {
+    // console.log("-----------Skipping seed");
+    return;
+  }
   const users = [{
     username: 'admin',
     email: 'admin@test.fr',
@@ -88,6 +92,7 @@ async function createSeedUsers() {
   const result = stmt.get() as { count: number };
   if (result.count === 0) {
     // console.log("start seed data")
+    const findUser = db.prepare("SELECT * FROM users WHERE email = ?");
     const insertUser = db.prepare(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`);
     const insertBlogs = db.prepare(`INSERT INTO blogs (user_id, title, image_url, content, created_at) VALUES (?, ?, ?, ?, ?)`)
     const insertSeeders = db.transaction((user, hashedPassword) => {
@@ -100,16 +105,18 @@ async function createSeedUsers() {
     })
     for (const user of users) {
       try {
-        // hashed pw
-        const hashedPassword = await hashPw(user.password)
-        insertSeeders(user, hashedPassword);
+        const existing = findUser.get(user.email);
+        if (!existing) {
+          // hashed pw
+          const hashedPassword = await hashPw(user.password)
+          insertSeeders(user, hashedPassword);
+          console.log("Seed user:", user.username);
+        }
 
-        // console.log("user created:", user.username);
       } catch (error) {
         console.error(`Error inserting user ${user.username}:`, error);
       }
     }
-
   }
 };
 initDb();

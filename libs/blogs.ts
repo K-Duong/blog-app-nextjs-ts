@@ -48,7 +48,6 @@ export async function getBlogById(blogId: number, userId?: number) { // userId i
 };
 
 export const sortBlogsByType = async (userId: number, type: string, order: string)=> {
-  // console.log('type, order', type, order)
     const stmt = db.prepare( `
     SELECT blogs.id, blogs.title, blogs.content, blogs.image_url as imageUrl, blogs.created_at as createdAt, users.username as author, COUNT(likes.blog_id) as likes, 
     EXISTS (SELECT * FROM likes  
