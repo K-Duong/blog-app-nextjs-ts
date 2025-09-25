@@ -10,3 +10,17 @@
   margin-bottom: 1rem;
 }
 
+.cta {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cta h3 {
+  font-weight: 500;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+

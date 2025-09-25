@@ -10,7 +10,6 @@ import { formatDate, hourFromNow, isDisplayedByHour } from "@/libs/formatDate";
 import {ButtonDeleteBlog, ButtonLike, ButtonModifyBlog} from "../../buttons";
 
 import styles from "./styles.module.css";
-// import { useState } from "react";
 
 export default function BlogItem({
   isAuthor,

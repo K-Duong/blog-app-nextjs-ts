@@ -4,8 +4,14 @@ import { useState } from "react";
 import { redirect } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { BsPersonPlus } from "react-icons/bs";
+import { IoIosAdd } from "react-icons/io";
 
-import { FormContainer, Button, IconProvider } from "@/components";
+import {
+  FormContainer,
+  Button,
+  IconProvider,
+  ButtonRedirect,
+} from "@/components";
 
 import { isValidEmail, isValidPw, isValidUsername } from "@/libs/utils";
 import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";
@@ -13,13 +19,13 @@ import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";
 import styles from "./page.module.css";
 
 export default function SignIn() {
-  const {data :session} = useSession();
-  
+  const { data: session } = useSession();
+
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  
+
   // redirect if user is already login
-  if (session && isSubmitted === false) redirect('/blogs');
+  if (session && isSubmitted === false) redirect("/blogs");
 
   // create new user
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,17 +84,18 @@ export default function SignIn() {
     }
   };
 
-  const handleRedirect = () => {
-    redirect("/new-blog");
-  };
 
   return isSubmitted ? (
     <div className={styles.success}>
       <h1>Thank you!</h1>
       <p>{"Let's create your first blog"}</p>
-      <Button type="button" className={styles.cta} onClick={handleRedirect}>
-        {"Create a new blog"}
-      </Button>
+      <ButtonRedirect path="/new-blog">
+        {" "}
+        <IconProvider>
+          <IoIosAdd />{" "}
+        </IconProvider>{" "}
+        Create new blog{" "}
+      </ButtonRedirect>
     </div>
   ) : (
     <FormContainer
