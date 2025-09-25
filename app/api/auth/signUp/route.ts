@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       );
     } else {
       // success
-      return NextResponse.json({ user: result.data }, { status: 201})
+      return NextResponse.json({ user: result.data }, { status: 201 })
     }
 
   } catch (e: unknown) {
@@ -23,8 +23,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
     return NextResponse.json(
-    { error: "Unknown error" },
-    { status: 500 }
-  );
+      { error: "Unknown error" },
+      { status: 500 }
+    );
   }
 }

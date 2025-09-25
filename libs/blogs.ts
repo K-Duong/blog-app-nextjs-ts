@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { UserPayload, BlogDataType, BlogPayload, BlogType } from "@/types";
+import { UserPayload, BlogDataType, BlogPayload} from "@/types";
 // import { waitForDebug } from "./utils";
 
 // queries
@@ -40,7 +40,7 @@ export async function getBlogById(blogId: number, userId?: number) { // userId i
     GROUP BY blogs.id`);
 
   const result = stmt.get(userId, blogId);
-  console.log('result get blog by id: ', result)
+  // console.log('result get blog by id: ', result)
   if (!result) {
     throw new Error('Blog not found');
   } else {
@@ -85,7 +85,7 @@ export async function storeBlog(blog: BlogPayload) {
 export async function updateBlog(blogId: number, blog: BlogPayload, userId: number) {
   const currentUser = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) as UserPayload | null;
   const currentBlog = db.prepare('SELECT * FROM blogs WHERE id = ?').get(blogId) as BlogDataType | null;
-  console.log('Current user:', currentUser, currentBlog);
+  // console.log('Current user:', currentUser, currentBlog);
   // const result = {status: false}
   if (!currentUser) {
     throw new Error('User not found');

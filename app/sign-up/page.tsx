@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { redirect } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { BsPersonPlus } from "react-icons/bs";
 
 import { FormContainer, Button, IconProvider } from "@/components";
@@ -13,9 +13,15 @@ import { ERRORMESSAGES, SIGNINFIELDS } from "@/constants";
 import styles from "./page.module.css";
 
 export default function SignIn() {
+  const {data :session} = useSession();
+  
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  
+  // redirect if user is already login
+  if (session && isSubmitted === false) redirect('/blogs');
 
+  // create new user
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -78,9 +84,10 @@ export default function SignIn() {
 
   return isSubmitted ? (
     <div className={styles.success}>
-      <h1>Thank you</h1>
+      <h1>Thank you!</h1>
+      <p>{"Let's create your first blog"}</p>
       <Button type="button" className={styles.cta} onClick={handleRedirect}>
-        Create your blog
+        {"Create a new blog"}
       </Button>
     </div>
   ) : (
