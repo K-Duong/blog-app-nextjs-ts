@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { deleteBlog } from "@/libs/blogs";
+import { revalidatePath } from "next/cache";
 
 export const DELETE = async (req: Request) => {
   try {
@@ -13,6 +14,7 @@ export const DELETE = async (req: Request) => {
     if (result.changes === 0) {
       return NextResponse.json({ message: "Failed to delete blog." }, { status: 400 });
     } else {
+      revalidatePath('/blogs')
       return NextResponse.json({ message: 'Blog deleted successfully' }, { status: 200 });
     }
   } catch (error) {

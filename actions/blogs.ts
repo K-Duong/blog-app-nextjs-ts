@@ -6,6 +6,7 @@ import { uploadImage } from "@/libs/cloudinary";
 import { storeBlog, updateBlog } from "@/libs/blogs";
 import { getCurrentUser } from "@/libs/auth";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 // helper function to handle the process of blog'validation and upload image to cloudinary
 const processCheckingInput = async (formData: FormData) => {
@@ -72,7 +73,6 @@ const processCheckingInput = async (formData: FormData) => {
 }
 
 export const handleCreateBlog = async (prevState: FormState, formData: FormData): Promise<FormState> => {
-  // console.log("create new blog")
   const { errors, newBlogData } = await processCheckingInput(formData);
 
   if (errors && Object.keys(errors).length > 0) {
@@ -88,7 +88,9 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
       errors: { ...prevState.errors, general: "No data to submit" }
     };
 
-    await storeBlog(newBlogData);
+    const result = await storeBlog(newBlogData);
+    revalidatePath("/blogs");
+      
     return {
       ...prevState,
       errors: null,
@@ -99,7 +101,6 @@ export const handleCreateBlog = async (prevState: FormState, formData: FormData)
 };
 
 export const handleUpdateBlog = async (blogId: number, prevState: FormState, formData: FormData): Promise<FormState> => {
-  console.log("update existing blog")
   const { errors, newBlogData } = await processCheckingInput(formData);
 
   if (errors && Object.keys(errors).length > 0) {
@@ -115,7 +116,9 @@ export const handleUpdateBlog = async (blogId: number, prevState: FormState, for
       errors: { ...prevState.errors, general: "No data to submit" }
     };
 
-    await updateBlog(blogId, newBlogData, newBlogData.userId);
+    const result = await updateBlog(blogId, newBlogData, newBlogData.userId);
+    revalidatePath("/blogs","layout");
+   
     return {
       ...prevState,
       errors: null,

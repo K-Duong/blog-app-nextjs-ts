@@ -99,7 +99,7 @@ export async function updateBlog(blogId: number, blog: BlogPayload, userId: numb
    `);
     const updatedBlog = stmt.run(blog.imageUrl, blog.title, blog.content, blogId);
     console.log('Updated blog:', updatedBlog);
-    return updateBlog
+    return updatedBlog
   }
 }
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { notFound, redirect } from "next/navigation";
+
 import { MdOutlineDelete } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
 
@@ -9,6 +10,7 @@ import Modal from "@/components/modal";
 import Button from "../ButtonWrapper";
 
 import IconProvider from "@/components/IconProvider";
+import { useBlogsList } from "@/components/context/blogsContext";
 
 function ActionsModal({
   setIsOpenedModal,
@@ -37,6 +39,9 @@ function ActionsModal({
 }
 
 export default function ButtonDeleteBlog({ blogId }: { blogId: number }) {
+
+  const {blogsList, setBlogsList} = useBlogsList();
+
   const [isOpenedModal, setIsOpenedModal] = useState(false);
 
   const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -54,11 +59,14 @@ export default function ButtonDeleteBlog({ blogId }: { blogId: number }) {
       body: JSON.stringify({ blogId }),
     });
     if (result.ok) {
-      console.log("deleted blog id:", blogId);
       // close modal
       setIsOpenedModal(false);
-      // redirect to /blogs
-      redirect("/blogs");
+      setBlogsList((prevBlogs) => {
+        if (!prevBlogs) return null;
+        return prevBlogs.filter(blog => blog.id !== blogId);
+      });
+      redirect('/blogs')
+      
     } else {
       notFound();
     }

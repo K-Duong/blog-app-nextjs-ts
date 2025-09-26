@@ -4,22 +4,23 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import { BlogType } from "@/types";
 import actionToggleLike from "@/actions/like";
+import { useBlogsList } from "@/components/context/blogsContext";
 
 import { SelectField } from "@/components/form";
 import BlogItem from "../BlogItem";
 
 import styles from "./styles.module.css";
 
-export default function BlogList({ blogs }: { blogs: BlogType[] }) {
+export default function BlogList() {
+  const {blogsList, setBlogsList} = useBlogsList();
+
   const session = useSession();
   const username = session?.data?.user?.username;
   const router = useRouter();
 
-  const [blogsList, setBlogsList] = useState<BlogType[] | null>(blogs);
   const [typeOrder, setTypeOrder] = useState("createdAt");
-  const [nameOrder, setNameOrder] = useState("DESC");
+  const [nameOrder, setNameOrder] = useState("desc");
 
   const fetchOrderBlogs = async (type: string, order: string) => {
     const res = await fetch(`/api/blogs?type=${type}&order=${order}`, {
@@ -56,7 +57,7 @@ export default function BlogList({ blogs }: { blogs: BlogType[] }) {
       // update sorted list
       if (typeOrder === "likes") {
         return [...newBlogs].sort((blog1, blog2) =>
-          nameOrder === "DESC"
+          nameOrder === "desc"
             ? blog2.likes - blog1.likes
             : blog1.likes - blog2.likes
         );
@@ -115,8 +116,8 @@ export default function BlogList({ blogs }: { blogs: BlogType[] }) {
         />
         <SelectField
           items={[
-            { name: "asc", label: "Asc", value: "ASC" },
-            { name: "desc", label: "Desc", value: "DESC" },
+            { name: "asc", label: "Asc", value: "asc" },
+            { name: "desc", label: "Desc", value: "desc" },
           ]}
           field={{
             id: "7",

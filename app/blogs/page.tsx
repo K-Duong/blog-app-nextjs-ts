@@ -1,21 +1,21 @@
+"use client";
 import { redirect } from "next/navigation";
 import { IoIosAdd } from "react-icons/io";
 
-import { BlogType } from "@/types";
-import { getAllBlogs } from "@/libs/blogs";
-import { getCurrentUser } from "@/libs/auth";
-
-import { BlogList, ButtonRedirect} from "@/components";
+import { BlogList, ButtonRedirect } from "@/components";
 
 import styles from "./page.module.css";
+import { useBlogsList } from "@/components/context/blogsContext";
+import { useSession } from "next-auth/react";
 
-export default async function BlogsPage() {
-  const user = await getCurrentUser();
+export default  function BlogsPage() {
+  const session = useSession();
+  const user = session?.data?.user;
   if (!user) redirect("/login");
-  const blogs = (await getAllBlogs(Number(user.id))) as BlogType[];
 
+  const { blogsList } = useBlogsList();
   const hasBlog =
-    blogs.findIndex((blog) => {
+    blogsList?.findIndex((blog) => {
       return blog.author === user.username;
     }) !== -1;
 
@@ -27,12 +27,12 @@ export default async function BlogsPage() {
           {" "}
           <h3>{"Let's create your first blog!"}</h3>
           <ButtonRedirect path="/new-blog">
-            <IoIosAdd style={{fontSize: '1rem'}}/>
+            <IoIosAdd style={{ fontSize: "1rem" }} />
             Create your first blog
           </ButtonRedirect>
         </div>
       )}
-      <BlogList blogs={blogs} />
+      <BlogList />
     </div>
   );
 }
