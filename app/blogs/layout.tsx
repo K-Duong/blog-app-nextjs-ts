@@ -12,6 +12,7 @@ export default async function BlogsLayout({
   modal: React.ReactNode;
 }) {
   const user = await getCurrentUser();
+  // console.log('user', user)
   if (!user) redirect("/login");
   const blogs = (await getAllBlogs(Number(user.id))) as BlogType[];
   return (

@@ -28,7 +28,7 @@ export default function Navbar() {
       </LinkWrapper>
 
       <div className={styles.links}>
-        {!session ? (
+        {!session?.user?.email ? (
           <Button  type="button" onClick={() => signIn()}>
               <IconProvider>
                 <MdLogin />

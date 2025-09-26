@@ -2,16 +2,14 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { type User, AuthOptions, Session } from "next-auth"
 
 import { ERRORMESSAGES } from "@/constants"
-import { getUserByEmail, verifyPw } from "@/libs/users"
+import { getUserByEmail, getUserById, verifyPw } from "@/libs/users"
 import { isValidEmail, isValidPw } from "@/libs/utils"
 import { JWT } from "next-auth/jwt"
 
-
-// TODO: move to options.ts
 export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, 
+    maxAge: 24 * 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -60,12 +58,14 @@ export const authOptions: AuthOptions = {
 
     async session ({session, token} : {session: Session, token: JWT}) {
       if (session.user && token.id) {
+        const validUser = await getUserById(Number(token.id));
+        if (!validUser) return {} as Session
         session.user.id = token.id as string;
         session.user.username= token.username as string;
       };
       // console.log("session callback session:", session);
       return session;
     }
-  
+
   }
 };

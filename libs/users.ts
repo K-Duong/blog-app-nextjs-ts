@@ -70,6 +70,14 @@ export const getUserByEmail = async (email: string) : Promise<UserPayload | null
   return user 
 }
 
+export const getUserById = async (userId: number) : Promise<UserPayload | null>=> {
+  
+  const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
+  const user = stmt.get(userId) as UserPayload ;
+  // await waitForDebug(3000); // simulate delay
+  if(!user) return null
+  return user 
+}
 
 
 //update user (pw, username)
